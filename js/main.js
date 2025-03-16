@@ -1369,7 +1369,7 @@ function initAutoComplete() {
 	if (focusModeTextarea) {
 		const focusModeAutoComplete = new autoComplete({
 			selector: '#focus-mode-textarea',
-			placeHolder: 'Начните писать здесь...',
+			placeHolder: 'Начни писать здесь...',
 			data: {
 				src: allWords,
 				cache: true,
