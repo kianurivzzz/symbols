@@ -1168,6 +1168,120 @@ function initAutoComplete() {
 	// Объединяем стандартные и пользовательские слова
 	const allWords = [...new Set([...commonWords, ...userWords])];
 
+	// Переменные для инлайн-подсказок
+	let currentSuggestion = '';
+	let suggestionElement = null;
+
+	// Функция для создания элемента инлайн-подсказки
+	function createSuggestionElement(textareaElement) {
+		const element = document.createElement('div');
+		element.className = 'inline-suggestion';
+		element.style.font = window.getComputedStyle(textareaElement).font;
+		element.style.lineHeight =
+			window.getComputedStyle(textareaElement).lineHeight;
+		element.style.padding =
+			window.getComputedStyle(textareaElement).padding;
+
+		// Вставляем элемент после текстового поля
+		textareaElement.parentNode.insertBefore(
+			element,
+			textareaElement.nextSibling
+		);
+
+		// Позиционируем элемент поверх текстового поля
+		element.style.top = textareaElement.offsetTop + 'px';
+		element.style.left = textareaElement.offsetLeft + 'px';
+		element.style.width = textareaElement.offsetWidth + 'px';
+		element.style.height = textareaElement.offsetHeight + 'px';
+
+		return element;
+	}
+
+	// Функция для обновления инлайн-подсказки
+	function updateInlineSuggestion(textareaElement, suggestionEl) {
+		const text = textareaElement.value;
+		const cursorPos = textareaElement.selectionStart;
+
+		// Находим текущее слово
+		let wordStart = cursorPos;
+		while (wordStart > 0 && !/\s/.test(text[wordStart - 1])) {
+			wordStart--;
+		}
+
+		const currentWord = text.substring(wordStart, cursorPos);
+
+		// Если слово слишком короткое, не показываем подсказку
+		if (currentWord.length < 2) {
+			suggestionEl.textContent = '';
+			currentSuggestion = '';
+			return;
+		}
+
+		// Ищем подходящее слово в словаре
+		const suggestion = allWords.find(
+			word =>
+				word.toLowerCase().startsWith(currentWord.toLowerCase()) &&
+				word.length > currentWord.length
+		);
+
+		if (suggestion) {
+			// Создаем текст с подсказкой
+			const beforeCursor = text.substring(0, wordStart);
+			const afterCursor = text.substring(cursorPos);
+
+			// Вычисляем отступы для правильного позиционирования
+			const textBeforeCursor = beforeCursor + currentWord;
+
+			// Создаем подсказку: текст до курсора + оставшаяся часть предлагаемого слова
+			suggestionEl.textContent =
+				textBeforeCursor +
+				suggestion.substring(currentWord.length) +
+				afterCursor;
+			currentSuggestion = suggestion;
+		} else {
+			suggestionEl.textContent = '';
+			currentSuggestion = '';
+		}
+	}
+
+	// Функция для применения подсказки
+	function applySuggestion(textareaElement) {
+		if (!currentSuggestion) return false;
+
+		const text = textareaElement.value;
+		const cursorPos = textareaElement.selectionStart;
+
+		// Находим начало текущего слова
+		let wordStart = cursorPos;
+		while (wordStart > 0 && !/\s/.test(text[wordStart - 1])) {
+			wordStart--;
+		}
+
+		const currentWord = text.substring(wordStart, cursorPos);
+
+		// Заменяем текущее слово предложенным
+		const newText =
+			text.substring(0, wordStart) +
+			currentSuggestion +
+			text.substring(cursorPos);
+		textareaElement.value = newText;
+
+		// Устанавливаем курсор после вставленного слова
+		textareaElement.selectionStart = wordStart + currentSuggestion.length;
+		textareaElement.selectionEnd = wordStart + currentSuggestion.length;
+
+		// Сбрасываем подсказку
+		currentSuggestion = '';
+		if (suggestionElement) {
+			suggestionElement.textContent = '';
+		}
+
+		// Обновляем статистику
+		updateStats();
+
+		return true;
+	}
+
 	// Создаем экземпляр autoComplete
 	const autoCompleteJS = new autoComplete({
 		selector: '#textarea',
@@ -1222,6 +1336,33 @@ function initAutoComplete() {
 		threshold: 2,
 		debounce: 300,
 		searchEngine: 'strict',
+	});
+
+	// Создаем и настраиваем элемент инлайн-подсказки для основного текстового поля
+	suggestionElement = createSuggestionElement(textarea);
+
+	// Добавляем обработчики событий для инлайн-подсказок
+	textarea.addEventListener('input', () => {
+		updateInlineSuggestion(textarea, suggestionElement);
+	});
+
+	textarea.addEventListener('keydown', e => {
+		// Применяем подсказку при нажатии Tab
+		if (e.key === 'Tab' && currentSuggestion) {
+			e.preventDefault(); // Предотвращаем стандартное поведение Tab
+			applySuggestion(textarea);
+		}
+	});
+
+	textarea.addEventListener('click', () => {
+		updateInlineSuggestion(textarea, suggestionElement);
+	});
+
+	// Скрываем подсказку при потере фокуса
+	textarea.addEventListener('blur', () => {
+		if (suggestionElement) {
+			suggestionElement.textContent = '';
+		}
 	});
 
 	// Создаем экземпляр autoComplete для режима фокусировки
@@ -1281,6 +1422,40 @@ function initAutoComplete() {
 			threshold: 2,
 			debounce: 300,
 			searchEngine: 'strict',
+		});
+
+		// Создаем и настраиваем элемент инлайн-подсказки для режима фокусировки
+		const focusModeSuggestionElement =
+			createSuggestionElement(focusModeTextarea);
+
+		// Добавляем обработчики событий для инлайн-подсказок в режиме фокусировки
+		focusModeTextarea.addEventListener('input', () => {
+			updateInlineSuggestion(
+				focusModeTextarea,
+				focusModeSuggestionElement
+			);
+		});
+
+		focusModeTextarea.addEventListener('keydown', e => {
+			// Применяем подсказку при нажатии Tab
+			if (e.key === 'Tab' && currentSuggestion) {
+				e.preventDefault(); // Предотвращаем стандартное поведение Tab
+				applySuggestion(focusModeTextarea);
+				// Обновляем статистику для режима фокусировки
+				updateFocusModeStats();
+			}
+		});
+
+		focusModeTextarea.addEventListener('click', () => {
+			updateInlineSuggestion(
+				focusModeTextarea,
+				focusModeSuggestionElement
+			);
+		});
+
+		// Скрываем подсказку при потере фокуса
+		focusModeTextarea.addEventListener('blur', () => {
+			focusModeSuggestionElement.textContent = '';
 		});
 	}
 

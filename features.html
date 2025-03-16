@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description"
+		content="Преимущества symbols – сервис для подсчёта количества символов в тексте. Простой и удобный интерфейс. Считай символы в тексте быстро и легко.">
+	<meta name="keywords"
+		content="счетчик символов, подсчет символов, количество символов в тексте, онлайн счетчик символов, проверка длины текста, seo оптимизация текста, анализ текста, количество слов, подсчет слов, checker, analyzer">
+	<meta name="author" content="Nikita Karasyov">
+	<link rel="stylesheet" href="css/style.css">
+	<!-- Bootstrap -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+		(function (m, e, t, r, i, k, a) {
+			m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
+			m[i].l = 1 * new Date();
+			for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+			k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+		})
+			(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+		ym(97873331, "init", {
+			clickmap: true,
+			trackLinks: true,
+			accurateTrackBounce: true,
+			webvisor: true
+		});
+	</script>
+	<noscript>
+		<div><img src="https://mc.yandex.ru/watch/97873331" style="position:absolute; left:-9999px;" alt="" /></div>
+	</noscript>
+	<!-- /Yandex.Metrika counter -->
+	<!-- Top.Mail.Ru counter -->
+	<script type="text/javascript">
+		var _tmr = window._tmr || (window._tmr = []);
+		_tmr.push({ id: "3537871", type: "pageView", start: (new Date()).getTime() });
+		(function (d, w, id) {
+			if (d.getElementById(id)) return;
+			var ts = d.createElement("script"); ts.type = "text/javascript"; ts.async = true; ts.id = id;
+			ts.src = "https://top-fwz1.mail.ru/js/code.js";
+			var f = function () { var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ts, s); };
+			if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+		})(document, window, "tmr-code");
+	</script>
+	<noscript>
+		<div><img src="https://top-fwz1.mail.ru/counter?id=3537871;js=na" style="position:absolute;left:-9999px;"
+				alt="Top.Mail.Ru" /></div>
+	</noscript>
+	<!-- /Top.Mail.Ru counter -->
+
+	<title>Преимущества – symbols</title>
+
+	<style>
+		.features-page {
+			padding: 2rem 0;
+		}
+
+		.features-title {
+			font-size: 2.5rem;
+			font-weight: 700;
+			margin-bottom: 2rem;
+			text-align: center;
+		}
+
+		.features-subtitle {
+			font-size: 1.2rem;
+			color: var(--text-secondary);
+			text-align: center;
+			margin-bottom: 3rem;
+			max-width: 800px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.features-slider {
+			position: relative;
+			overflow: hidden;
+			margin-bottom: 4rem;
+			border-radius: 12px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			background-color: var(--background-secondary);
+		}
+
+		.slides-container {
+			display: flex;
+			transition: transform 0.5s ease;
+		}
+
+		.slide {
+			min-width: 100%;
+			padding: 3rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+
+		.slide-icon {
+			width: 80px;
+			height: 80px;
+			margin-bottom: 1.5rem;
+			padding: 1rem;
+			border-radius: 50%;
+			background-color: var(--accent-color-alpha);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.slide-icon svg {
+			width: 40px;
+			height: 40px;
+			color: var(--accent-color);
+		}
+
+		.slide-title {
+			font-size: 1.8rem;
+			font-weight: 600;
+			margin-bottom: 1rem;
+		}
+
+		.slide-description {
+			font-size: 1.1rem;
+			color: var(--text-secondary);
+			max-width: 600px;
+			margin-bottom: 2rem;
+		}
+
+		.slide-image {
+			max-width: 100%;
+			height: auto;
+			border-radius: 8px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+			margin-top: 1rem;
+		}
+
+		.slider-controls {
+			display: flex;
+			justify-content: center;
+			margin: 2rem 0;
+		}
+
+		.slider-dot {
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			background-color: var(--border-color);
+			margin: 0 6px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		.slider-dot.active {
+			background-color: var(--accent-color);
+		}
+
+		.slider-arrows {
+			position: absolute;
+			top: 50%;
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			transform: translateY(-50%);
+			z-index: 10;
+		}
+
+		.slider-arrow {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background-color: var(--background-primary);
+			border: 1px solid var(--border-color);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			margin: 0 1rem;
+			transition: all 0.3s ease;
+		}
+
+		.slider-arrow:hover {
+			background-color: var(--accent-color);
+			color: white;
+		}
+
+		.features-cta {
+			text-align: center;
+			margin-top: 3rem;
+			padding: 2rem;
+			background-color: var(--background-secondary);
+			border-radius: 12px;
+		}
+
+		.features-cta-title {
+			font-size: 1.8rem;
+			font-weight: 600;
+			margin-bottom: 1rem;
+		}
+
+		.features-cta-text {
+			font-size: 1.1rem;
+			color: var(--text-secondary);
+			margin-bottom: 2rem;
+			max-width: 600px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.features-back {
+			text-align: center;
+			margin-top: 3rem;
+		}
+
+		@media (max-width: 768px) {
+			.slide {
+				padding: 2rem 1rem;
+			}
+
+			.slide-title {
+				font-size: 1.5rem;
+			}
+
+			.slide-description {
+				font-size: 1rem;
+			}
+
+			.features-title {
+				font-size: 2rem;
+			}
+		}
+	</style>
+</head>
+
+<body class='d-flex flex-column min-vh-100'>
+	<nav class="navbar navbar-expand-lg">
+		<div class="container">
+			<a class="navbar-brand" href="https://kianurivzzz.github.io/symbols/">symbols.</a>
+			<span class="navbar-text">
+				выводим количество символов на экран
+			</span>
+			<button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
+				<svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+					xmlns="http://www.w3.org/2000/svg">
+					<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" />
+					<line x1="12" y1="3" x2="12" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+					<line x1="12" y1="19" x2="12" y2="21" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" />
+					<line x1="3" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+					<line x1="19" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" />
+					<line x1="5.63604" y1="5.63604" x2="7.05026" y2="7.05026" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" />
+					<line x1="16.9497" y1="16.9497" x2="18.364" y2="18.364" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" />
+					<line x1="5.63604" y1="18.364" x2="7.05026" y2="16.9497" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" />
+					<line x1="16.9497" y1="7.05026" x2="18.364" y2="5.63604" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" />
+				</svg>
+				<svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+					xmlns="http://www.w3.org/2000/svg">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</button>
+		</div>
+	</nav>
+
+	<div class="container">
+		<main class="features-page">
+			<h1 class="features-title">Преимущества symbols</h1>
+			<p class="features-subtitle">Сервис даёт множество полезных функций для работы с текстом, которые
+				помогут в написании, редактировании и анализе контента</p>
+
+			<div class="features-slider">
+				<div class="slides-container">
+					<!-- Слайд 1 -->
+					<div class="slide" id="slide-1">
+						<div class="slide-icon">
+							<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+									stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" />
+								<path d="M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+						<h2 class="slide-title">Мгновенный подсчёт символов</h2>
+						<p class="slide-description">Получайте точную статистику по количеству символов, слов,
+							предложений и абзацев в режиме реального времени. Идеально для работы с ограничениями по
+							объёму текста.</p>
+						<img src="img/features/text-analysis.png" alt="Подсчёт символов" class="slide-image">
+					</div>
+
+					<!-- Слайд 2 -->
+					<div class="slide" id="slide-2">
+						<div class="slide-icon">
+							<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round" />
+								<path
+									d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"
+									stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" />
+							</svg>
+						</div>
+						<h2 class="slide-title">Тёмная и светлая темы</h2>
+						<p class="slide-description">Выбирайте комфортный для ваших глаз режим работы. Тёмная тема
+							снижает нагрузку на зрение при работе в условиях низкой освещённости.</p>
+						<img src="img/features/theme.png" alt="Тёмная и светлая темы" class="slide-image">
+					</div>
+
+					<!-- Слайд 3 -->
+					<div class="slide" id="slide-3">
+						<div class="slide-icon">
+							<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M4 4h6v6H4V4z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" />
+								<path d="M14 4h6v6h-6V4z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" />
+								<path d="M4 14h6v6H4v-6z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+									stroke-linejoin="round" />
+								<path d="M14 14h6v6h-6v-6z" stroke="currentColor" stroke-width="2"
+									stroke-linecap="round" stroke-linejoin="round" />
+							</svg>
+						</div>
+						<h2 class="slide-title">Режим фокусировки</h2>
+						<p class="slide-description">Сконцентрируйтесь на написании текста без отвлекающих факторов.
+							Режим фокусировки убирает всё лишнее с экрана и позволяет полностью погрузиться в творческий
+							процесс.</p>
+						<img src="img/features/focus.png" alt="Режим фокусировки" class="slide-image">
+					</div>
+
+					<!-- Слайд 4 -->
+					<div class="slide" id="slide-4">
+						<div class="slide-icon">
+							<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
+									stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+							</svg>
+						</div>
+						<h2 class="slide-title">Расширенная статистика</h2>
+						<p class="slide-description">Получайте детальную информацию о вашем тексте: плотность ключевых
+							слов, среднюю длину предложений, частоту использования слов и многое другое.</p>
+						<img src="img/features/stats.png" alt="Расширенная статистика" class="slide-image">
+					</div>
+
+					<!-- Слайд 5 -->
+					<div class="slide" id="slide-5">
+						<div class="slide-icon">
+							<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor"
+									stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+								<path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor"
+									stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+							</svg>
+						</div>
+						<h2 class="slide-title">Умное автодополнение</h2>
+						<p class="slide-description">Ускорьте процесс написания текста с помощью интеллектуального
+							автодополнения, которое учится на основе ваших текстов и предлагает релевантные варианты
+							слов.</p>
+						<img src="img/features/autocomplete.png" alt="Умное автодополнение" class="slide-image">
+					</div>
+				</div>
+
+				<div class="slider-arrows">
+					<div class="slider-arrow prev-arrow">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" />
+						</svg>
+					</div>
+					<div class="slider-arrow next-arrow">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+								stroke-linejoin="round" />
+						</svg>
+					</div>
+				</div>
+
+				<div class="slider-controls">
+					<div class="slider-dot active" data-slide="1"></div>
+					<div class="slider-dot" data-slide="2"></div>
+					<div class="slider-dot" data-slide="3"></div>
+					<div class="slider-dot" data-slide="4"></div>
+					<div class="slider-dot" data-slide="5"></div>
+				</div>
+			</div>
+
+			<div class="features-cta">
+				<h3 class="features-cta-title">Начните использовать symbols прямо сейчас</h3>
+				<p class="features-cta-text">Бесплатный онлайн-сервис для работы с текстом без регистрации и
+					ограничений. Все ваши данные остаются только на вашем устройстве.</p>
+				<a href="index.html" class="btn btn-primary btn-lg">Перейти к сервису</a>
+			</div>
+		</main>
+	</div>
+
+	<div class="container mt-auto">
+		<footer class="py-4 my-4">
+			<div class="row">
+				<div class="col-12 mb-3">
+					<ul class="nav justify-content-center footer-links">
+						<li class="nav-item"><a href="https://nkarasyov.space" class="nav-link px-3">Учиться</a></li>
+						<li class="nav-item"><a href="https://kianurivzzz.github.io/kurkod/"
+								class="nav-link px-3">Kurkod</a></li>
+						<li class="nav-item"><a href="features.html" class="nav-link px-3">Преимущества</a></li>
+						<li class="nav-item"><a href="privacy.html" class="nav-link px-3">Политика
+								конфиденциальности</a></li>
+						<li class="nav-item"><a href="https://github.com/kianurivzzz/symbols" class="nav-link px-3"
+								target="_blank">
+								<svg class="github-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"
+									xmlns="http://www.w3.org/2000/svg"
+									style="vertical-align: text-bottom; margin-right: 4px;">
+									<path fill-rule="evenodd"
+										d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+									</path>
+								</svg>
+								GitHub</a></li>
+					</ul>
+				</div>
+				<div class="col-12">
+					<div class="d-flex justify-content-between align-items-center">
+						<p class="text-body-secondary mb-0">© 2024-2025 Никита Карасёв</p>
+						<p class="text-body-secondary mb-0">Разработано <a href="https://nkarasyov.ru"
+								class="text-decoration-none">Никитой Карасёвым</a></p>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+	<script src="js/theme.js"></script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const slidesContainer = document.querySelector('.slides-container');
+			const slides = document.querySelectorAll('.slide');
+			const dots = document.querySelectorAll('.slider-dot');
+			const prevArrow = document.querySelector('.prev-arrow');
+			const nextArrow = document.querySelector('.next-arrow');
+			let currentSlide = 0;
+			const totalSlides = slides.length;
+
+			// Функция для перехода к определенному слайду
+			function goToSlide(slideIndex) {
+				if (slideIndex < 0) {
+					slideIndex = totalSlides - 1;
+				} else if (slideIndex >= totalSlides) {
+					slideIndex = 0;
+				}
+
+				currentSlide = slideIndex;
+				slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+				// Обновляем активную точку
+				dots.forEach((dot, index) => {
+					if (index === currentSlide) {
+						dot.classList.add('active');
+					} else {
+						dot.classList.remove('active');
+					}
+				});
+			}
+
+			// Обработчики событий для стрелок
+			prevArrow.addEventListener('click', () => {
+				goToSlide(currentSlide - 1);
+			});
+
+			nextArrow.addEventListener('click', () => {
+				goToSlide(currentSlide + 1);
+			});
+
+			// Обработчики событий для точек
+			dots.forEach((dot, index) => {
+				dot.addEventListener('click', () => {
+					goToSlide(index);
+				});
+			});
+
+			// Автоматическая смена слайдов каждые 5 секунд
+			setInterval(() => {
+				goToSlide(currentSlide + 1);
+			}, 5000);
+		});
+	</script>
+</body>
+
+</html>
