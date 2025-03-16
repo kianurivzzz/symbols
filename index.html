@@ -65,18 +65,28 @@
                 выводим количество символов на экран
             </span>
             <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-                <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M12 17.625c-3.107 0-5.625-2.518-5.625-5.625S8.893 6.375 12 6.375 17.625 8.893 17.625 12s-2.518 5.625-5.625 5.625zM12 7.875c-2.278 0-4.125 1.847-4.125 4.125s1.847 4.125 4.125 4.125 4.125-1.847 4.125-4.125S14.278 7.875 12 7.875z"
-                        fill="currentColor" />
-                    <path
-                        d="M12 5.25a.75.75 0 01-.75-.75v-1.5a.75.75 0 011.5 0v1.5a.75.75 0 01-.75.75zM12 21a.75.75 0 01-.75-.75v-1.5a.75.75 0 011.5 0v1.5A.75.75 0 0112 21zM21 12.75h-1.5a.75.75 0 010-1.5H21a.75.75 0 010 1.5zM4.5 12.75H3a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM17.303 7.447a.75.75 0 01-.53-1.28l1.06-1.06a.75.75 0 011.06 1.06l-1.06 1.06a.75.75 0 01-.53.22zM5.167 19.583a.75.75 0 01-.53-1.28l1.06-1.06a.75.75 0 111.06 1.06l-1.06 1.06a.75.75 0 01-.53.22zM17.303 17.553a.75.75 0 01-.53-.22l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 01-.53 1.28zM5.167 5.417a.75.75 0 01-.53-.22l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 01-.53 1.28z"
-                        fill="currentColor" />
+                <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" />
+                    <line x1="12" y1="3" x2="12" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="12" y1="19" x2="12" y2="21" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="3" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="19" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="5.63604" y1="5.63604" x2="7.05026" y2="7.05026" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="16.9497" y1="16.9497" x2="18.364" y2="18.364" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="5.63604" y1="18.364" x2="7.05026" y2="16.9497" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="16.9497" y1="7.05026" x2="18.364" y2="5.63604" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
                 </svg>
-                <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M12.375 22.5c-2.674 0-5.25-.84-7.424-2.426a10.888 10.888 0 01-4.075-6.524.75.75 0 01.994-.849 8.49 8.49 0 002.116.266c4.558 0 8.264-3.706 8.264-8.264 0-.718-.091-1.428-.271-2.116a.75.75 0 01.848-.994 10.89 10.89 0 016.524 4.075c1.586 2.174 2.427 4.75 2.427 7.424 0 5.799-4.701 10.5-10.5 10.5l.097-1.092zm0-1.5c4.963 0 9-4.037 9-9 0-2.647-1.158-5.146-3.175-6.873a9.35 9.35 0 00-4.826-2.572c.059.474.089.954.089 1.437 0 5.376-4.374 9.75-9.75 9.75-.483 0-.964-.03-1.437-.089a9.35 9.35 0 002.572 4.826c1.727 2.018 4.226 3.175 6.873 3.175l.654-.654z"
-                        fill="currentColor" />
+                <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
         </div>
@@ -122,6 +132,65 @@
                         <span class="stat-value" id="word-count">0</span>
                     </div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-content">
+                        <span class="stat-label">Количество абзацев</span>
+                        <span class="stat-value" id="paragraph-count">0</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-content">
+                        <span class="stat-label">Количество предложений</span>
+                        <span class="stat-value" id="sentence-count">0</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-content">
+                        <span class="stat-label">Средняя длина предложения</span>
+                        <span class="stat-value" id="avg-sentence-length">0</span>
+                        <span class="stat-unit">слов</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="advanced-stats-toggle-container">
+                <button id="advanced-stats-toggle" class="advanced-stats-toggle">Показать расширенную
+                    статистику</button>
+            </div>
+
+            <div id="advanced-stats" class="advanced-stats">
+                <div class="advanced-stats-row">
+                    <div class="advanced-stats-col">
+                        <div class="stat-item">
+                            <div class="stat-content">
+                                <span class="stat-label">Уникальных слов</span>
+                                <span class="stat-value" id="unique-words">0</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-item">
+                            <div class="stat-content">
+                                <span class="stat-label">Индекс читабельности</span>
+                                <div class="readability-container">
+                                    <span class="stat-value" id="readability-score">0</span>
+                                    <span class="stat-unit">/100</span>
+                                </div>
+                                <span class="readability-description" id="readability-description">Нет данных</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="advanced-stats-col">
+                        <div class="stat-item top-words-container">
+                            <div class="stat-header">
+                                <span class="stat-label">Топ-10 самых используемых слов</span>
+                            </div>
+                            <ul class="top-words-list" id="top-words-list">
+                                <li class="top-word-item">Нет данных</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -129,20 +198,15 @@
     <div class="container mt-auto">
         <footer class="py-4 my-4">
             <div class="row">
-                <div class="col-12 mb-4">
-                    <ul class="nav justify-content-between footer-links">
-                        <li class="nav-item"><a href="https://stdout.studio" class="nav-link p-0">Разработка
-                                веб-сервисов</a></li>
-                        <li class="nav-item"><a href="https://webrotech.ru" class="nav-link p-0">Разработка
-                                чат-ботов</a></li>
-                        <li class="nav-item"><a href="https://stdout.media" class="nav-link p-0">Медиа</a></li>
-                        <li class="nav-item"><a href="https://nkarasyov.space" class="nav-link p-0">Учиться</a></li>
-                        <li class="nav-item"><a href="https://kurkod.stdout.media" class="nav-link p-0">Kurkod</a></li>
+                <div class="col-12 mb-3">
+                    <ul class="nav justify-content-center footer-links">
+                        <li class="nav-item"><a href="https://nkarasyov.space" class="nav-link px-3">Учиться</a></li>
+                        <li class="nav-item"><a href="https://kurkod.stdout.media" class="nav-link px-3">Kurkod</a></li>
                     </ul>
                 </div>
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-body-secondary mb-0"> 2024 stdout.media</p>
+                        <p class="text-body-secondary mb-0">© 2024 stdout.media</p>
                         <p class="text-body-secondary mb-0">Разработано <a href="https://nkarasyov.ru"
                                 class="text-decoration-none">Никитой Карасёвым</a></p>
                     </div>
@@ -155,121 +219,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-    <script>
-        // DOM Elements
-        const textarea = document.querySelector('#textarea');
-        const statsElements = {
-            symbolsWithSpaces: document.querySelector('#symbols-spaces'),
-            symbolsNoSpaces: document.querySelector('#symbols-no-spaces'),
-            wordCount: document.querySelector('#word-count')
-        };
-        const clearButton = document.querySelector('#clearButton');
-        const copyButton = document.querySelector('#copyButton');
-        const themeToggle = document.querySelector('#theme-toggle');
-
-        // Create toast element
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        document.body.appendChild(toast);
-
-        // Show toast message
-        function showToast(message, duration = 2000) {
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), duration);
-        }
-
-        // Animate value change
-        function animateValue(element) {
-            element.classList.add('animate');
-            setTimeout(() => element.classList.remove('animate'), 300);
-        }
-
-        // Update statistics
-        function updateStats() {
-            const text = textarea.value;
-            const stats = {
-                withSpaces: text.length,
-                noSpaces: text.replace(/\s/g, '').length,
-                words: text.trim() ? text.trim().split(/\s+/).length : 0
-            };
-
-            // Update display with animation
-            if (stats.withSpaces !== parseInt(statsElements.symbolsWithSpaces.textContent)) {
-                statsElements.symbolsWithSpaces.textContent = stats.withSpaces;
-                animateValue(statsElements.symbolsWithSpaces);
-            }
-
-            if (stats.noSpaces !== parseInt(statsElements.symbolsNoSpaces.textContent)) {
-                statsElements.symbolsNoSpaces.textContent = stats.noSpaces;
-                animateValue(statsElements.symbolsNoSpaces);
-            }
-
-            if (stats.words !== parseInt(statsElements.wordCount.textContent)) {
-                statsElements.wordCount.textContent = stats.words;
-                animateValue(statsElements.wordCount);
-            }
-        }
-
-        // Event Listeners
-        textarea.addEventListener('input', updateStats);
-
-        clearButton.addEventListener('click', () => {
-            textarea.value = '';
-            updateStats();
-            showToast('Текст очищен');
-        });
-
-        copyButton.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(textarea.value);
-                showToast('Текст скопирован');
-            } catch (err) {
-                showToast('Не удалось скопировать текст');
-            }
-        });
-
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            const isDark = document.body.classList.contains('dark-theme');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            showToast(isDark ? 'Тёмная тема включена' : 'Светлая тема включена');
-        });
-
-        // Initialize theme based on system preference or saved preference
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-            document.body.classList.add('dark-theme');
-        }
-
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                document.body.classList.toggle('dark-theme', e.matches);
-            }
-        });
-
-        // Handle paste event
-        textarea.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const text = e.clipboardData.getData('text');
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-
-            textarea.value =
-                textarea.value.substring(0, start) +
-                text +
-                textarea.value.substring(end);
-
-            textarea.selectionStart = textarea.selectionEnd = start + text.length;
-            updateStats();
-        });
-
-        // Initialize
-        updateStats();
-    </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
