@@ -1,0 +1,116 @@
+/* Стили для автодополнения */
+.autoComplete_wrapper {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+#autoComplete_list {
+	position: absolute;
+	z-index: 1000;
+	padding: 0;
+	margin: 0;
+	border-radius: 0.6rem;
+	background-color: var(--bg-color);
+	border: 1px solid var(--border-color);
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+	max-height: 200px;
+	overflow-y: auto;
+	transition: all 0.2s ease;
+	width: 100%;
+	max-width: 100%;
+	top: 100%;
+	left: 0;
+	margin-top: 5px;
+}
+
+#autoComplete_list>li {
+	padding: 10px 15px;
+	list-style: none;
+	text-align: left;
+	font-size: 14px;
+	color: var(--text-color);
+	transition: all 0.2s ease;
+	border-bottom: 1px solid var(--border-color);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#autoComplete_list>li:last-child {
+	border-bottom: none;
+}
+
+#autoComplete_list>li:hover {
+	background-color: var(--hover-color);
+	cursor: pointer;
+}
+
+#autoComplete_list>li mark {
+	background-color: transparent;
+	color: var(--accent-color);
+	font-weight: bold;
+}
+
+#autoComplete_list>li[aria-selected="true"] {
+	background-color: var(--hover-color);
+}
+
+/* Стили для режима фокусировки */
+.focus-mode-textarea-container .autoComplete_wrapper {
+	height: 100%;
+}
+
+.focus-mode-textarea-container #autoComplete_list {
+	width: 100%;
+	max-width: 100%;
+	top: auto;
+	bottom: 100%;
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+
+/* Стили для блока управления автодополнением */
+.autocomplete-controls {
+	margin-top: 20px;
+}
+
+.autocomplete-info {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 15px;
+}
+
+.autocomplete-info span {
+	font-size: 14px;
+	color: var(--text-secondary);
+}
+
+.autocomplete-info #user-words-count {
+	font-weight: bold;
+	color: var(--text-primary);
+}
+
+/* Стили для темной темы */
+.dark-theme #autoComplete_list {
+	background-color: var(--bg-color-dark);
+	border-color: var(--border-color-dark);
+}
+
+.dark-theme #autoComplete_list>li {
+	color: var(--text-color-dark);
+	border-color: var(--border-color-dark);
+}
+
+.dark-theme #autoComplete_list>li mark {
+	color: var(--accent-color-dark);
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+	#autoComplete_list {
+		max-width: 100%;
+		width: 100%;
+	}
+}

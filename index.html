@@ -97,6 +97,9 @@
             <div class="textarea-container">
                 <textarea class="form-control" placeholder="Вставь или введи текст для подсчёта" id="textarea"
                     data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"></textarea>
+                <div class="textarea-hint">
+                    Начните вводить текст. Функция автодополнения предложит варианты слов.
+                </div>
                 <div class="textarea-actions">
                     <button class="action-button" id="clearButton" title="Очистить текст">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -242,6 +245,17 @@
                                 <li class="top-word-item">Нет данных</li>
                             </ul>
                         </div>
+
+                        <!-- Добавляем блок для управления автодополнением -->
+                        <div class="stat-item autocomplete-controls">
+                            <div class="stat-header">
+                                <span class="stat-label">Автодополнение</span>
+                            </div>
+                            <div class="autocomplete-info">
+                                <span>Словарь автодополнения: <span id="user-words-count">0</span> слов</span>
+                                <button id="clear-user-words" class="control-button">Очистить словарь</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -296,6 +310,8 @@
                         <li class="nav-item"><a href="https://nkarasyov.space" class="nav-link px-3">Учиться</a></li>
                         <li class="nav-item"><a href="https://kianurivzzz.github.io/kurkod/"
                                 class="nav-link px-3">Kurkod</a></li>
+                        <li class="nav-item"><a href="privacy.html" class="nav-link px-3">Политика
+                                конфиденциальности</a></li>
                     </ul>
                 </div>
                 <div class="col-12">
@@ -314,7 +330,10 @@
         crossorigin="anonymous"></script>
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="js/theme.js"></script>
     <script src="js/main.js"></script>
+    <!-- Библиотека для автодополнения -->
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 
     <!-- Режим фокусировки -->
     <div id="focus-mode" class="focus-mode">
@@ -327,7 +346,13 @@
                 </svg>
             </button>
         </div>
-        <textarea id="focus-mode-textarea" class="focus-mode-textarea" placeholder="Начните писать здесь..."></textarea>
+        <div class="focus-mode-textarea-container">
+            <textarea id="focus-mode-textarea" class="focus-mode-textarea"
+                placeholder="Начните писать здесь..."></textarea>
+            <div class="focus-mode-hint">
+                Функция автодополнения активна. Начните вводить слово для появления подсказок.
+            </div>
+        </div>
         <div class="focus-mode-footer">
             <div class="focus-mode-stats">
                 <span id="focus-mode-word-count">0</span> слов,

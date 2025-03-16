@@ -14,7 +14,6 @@ const statsElements = {
 const clearButton = document.querySelector('#clearButton');
 const copyButton = document.querySelector('#copyButton');
 const downloadButton = document.querySelector('#downloadButton');
-const themeToggle = document.querySelector('#theme-toggle');
 const advancedStatsToggle = document.querySelector('#advanced-stats-toggle');
 const advancedStatsSection = document.querySelector('#advanced-stats');
 
@@ -1100,4 +1099,312 @@ function downloadTextAsTxt() {
 	document.body.removeChild(element);
 
 	showToast('Текст скачан в формате TXT');
+}
+
+// Функция для автодополнения текста
+function initAutoComplete() {
+	// Словарь часто используемых слов и фраз на русском языке
+	const commonWords = [
+		'привет',
+		'спасибо',
+		'пожалуйста',
+		'здравствуйте',
+		'до свидания',
+		'извините',
+		'конечно',
+		'возможно',
+		'необходимо',
+		'важно',
+		'срочно',
+		'интересно',
+		'удивительно',
+		'замечательно',
+		'прекрасно',
+		'великолепно',
+		'отлично',
+		'хорошо',
+		'плохо',
+		'ужасно',
+		'быстро',
+		'медленно',
+		'внимательно',
+		'осторожно',
+		'аккуратно',
+		'сегодня',
+		'завтра',
+		'вчера',
+		'утром',
+		'вечером',
+		'днем',
+		'ночью',
+		'неделя',
+		'месяц',
+		'год',
+		'время',
+		'место',
+		'человек',
+		'люди',
+		'работа',
+		'учеба',
+		'дом',
+		'семья',
+		'друзья',
+		'коллеги',
+	];
+
+	// Загружаем пользовательские слова из localStorage
+	let userWords = [];
+	const savedWords = localStorage.getItem('userWords');
+	if (savedWords) {
+		try {
+			userWords = JSON.parse(savedWords);
+			console.log(`Загружено ${userWords.length} пользовательских слов`);
+		} catch (e) {
+			console.error('Ошибка при загрузке пользовательских слов:', e);
+			userWords = [];
+		}
+	}
+
+	// Объединяем стандартные и пользовательские слова
+	const allWords = [...new Set([...commonWords, ...userWords])];
+
+	// Создаем экземпляр autoComplete
+	const autoCompleteJS = new autoComplete({
+		selector: '#textarea',
+		placeHolder: 'Вставь или введи текст для подсчёта',
+		data: {
+			src: allWords,
+			cache: true,
+		},
+		resultItem: {
+			highlight: true,
+		},
+		resultsList: {
+			maxResults: 10,
+			position: 'afterend',
+		},
+		events: {
+			input: {
+				selection: event => {
+					const selection = event.detail.selection.value;
+					const currentText = textarea.value;
+					const cursorPos = textarea.selectionStart;
+
+					// Находим начало текущего слова
+					let wordStart = cursorPos;
+					while (
+						wordStart > 0 &&
+						!/\s/.test(currentText[wordStart - 1])
+					) {
+						wordStart--;
+					}
+
+					// Заменяем текущее слово выбранным
+					const newText =
+						currentText.substring(0, wordStart) +
+						selection +
+						currentText.substring(cursorPos);
+
+					textarea.value = newText;
+
+					// Устанавливаем курсор после вставленного слова
+					textarea.selectionStart = wordStart + selection.length;
+					textarea.selectionEnd = wordStart + selection.length;
+
+					// Обновляем статистику
+					updateStats();
+
+					// Показываем уведомление
+					showToast(`Слово "${selection}" добавлено`);
+				},
+			},
+		},
+		threshold: 2,
+		debounce: 300,
+		searchEngine: 'strict',
+	});
+
+	// Создаем экземпляр autoComplete для режима фокусировки
+	if (focusModeTextarea) {
+		const focusModeAutoComplete = new autoComplete({
+			selector: '#focus-mode-textarea',
+			placeHolder: 'Начните писать здесь...',
+			data: {
+				src: allWords,
+				cache: true,
+			},
+			resultItem: {
+				highlight: true,
+			},
+			resultsList: {
+				maxResults: 10,
+				position: 'beforebegin',
+			},
+			events: {
+				input: {
+					selection: event => {
+						const selection = event.detail.selection.value;
+						const currentText = focusModeTextarea.value;
+						const cursorPos = focusModeTextarea.selectionStart;
+
+						// Находим начало текущего слова
+						let wordStart = cursorPos;
+						while (
+							wordStart > 0 &&
+							!/\s/.test(currentText[wordStart - 1])
+						) {
+							wordStart--;
+						}
+
+						// Заменяем текущее слово выбранным
+						const newText =
+							currentText.substring(0, wordStart) +
+							selection +
+							currentText.substring(cursorPos);
+
+						focusModeTextarea.value = newText;
+
+						// Устанавливаем курсор после вставленного слова
+						focusModeTextarea.selectionStart =
+							wordStart + selection.length;
+						focusModeTextarea.selectionEnd =
+							wordStart + selection.length;
+
+						// Обновляем статистику
+						updateFocusModeStats();
+
+						// Показываем уведомление
+						showToast(`Слово "${selection}" добавлено`);
+					},
+				},
+			},
+			threshold: 2,
+			debounce: 300,
+			searchEngine: 'strict',
+		});
+	}
+
+	console.log('Автодополнение инициализировано');
+}
+
+// Инициализируем автодополнение при загрузке страницы
+document.addEventListener('DOMContentLoaded', function () {
+	// Существующий код инициализации...
+
+	// Инициализация автодополнения
+	setTimeout(() => {
+		initAutoComplete();
+		updateUserWordsCount(); // Обновляем счетчик слов
+	}, 1000); // Небольшая задержка для уверенности, что DOM полностью загружен
+
+	// Добавляем обработчик для кнопки очистки словаря
+	const clearUserWordsButton = document.querySelector('#clear-user-words');
+	if (clearUserWordsButton) {
+		clearUserWordsButton.addEventListener('click', clearUserWords);
+	}
+});
+
+// Функция для обновления счетчика пользовательских слов
+function updateUserWordsCount() {
+	const userWordsCountElement = document.querySelector('#user-words-count');
+	if (!userWordsCountElement) return;
+
+	const savedWords = localStorage.getItem('userWords');
+	if (savedWords) {
+		try {
+			const userWords = JSON.parse(savedWords);
+			userWordsCountElement.textContent = userWords.length;
+		} catch (e) {
+			console.error('Ошибка при загрузке пользовательских слов:', e);
+			userWordsCountElement.textContent = '0';
+		}
+	} else {
+		userWordsCountElement.textContent = '0';
+	}
+}
+
+// Функция для очистки пользовательского словаря
+function clearUserWords() {
+	if (
+		confirm(
+			'Вы уверены, что хотите очистить словарь автодополнения? Все пользовательские слова будут удалены.'
+		)
+	) {
+		localStorage.removeItem('userWords');
+		showToast('Словарь автодополнения очищен');
+		updateUserWordsCount();
+
+		// Перезагружаем автодополнение с базовым словарем
+		setTimeout(() => {
+			initAutoComplete();
+		}, 500);
+	}
+}
+
+// Функция для обучения автодополнения на основе введенного текста
+function learnFromUserText() {
+	// Получаем текущий текст
+	const text = textarea.value;
+
+	// Если текст слишком короткий, не обрабатываем
+	if (text.length < 50) return;
+
+	// Разбиваем текст на слова
+	const words = text
+		.toLowerCase()
+		.replace(/[^\wа-яё\s]/g, '')
+		.split(/\s+/)
+		.filter(word => word.length > 3); // Только слова длиннее 3 символов
+
+	// Получаем уникальные слова
+	const uniqueWords = [...new Set(words)];
+
+	// Загружаем существующие пользовательские слова
+	let userWords = [];
+	const savedWords = localStorage.getItem('userWords');
+	if (savedWords) {
+		try {
+			userWords = JSON.parse(savedWords);
+		} catch (e) {
+			console.error('Ошибка при загрузке пользовательских слов:', e);
+			userWords = [];
+		}
+	}
+
+	// Добавляем новые слова
+	const newWords = uniqueWords.filter(word => !userWords.includes(word));
+
+	if (newWords.length > 0) {
+		// Объединяем с существующими словами
+		const updatedWords = [...userWords, ...newWords];
+
+		// Ограничиваем количество слов (например, до 1000)
+		const MAX_WORDS = 1000;
+		if (updatedWords.length > MAX_WORDS) {
+			updatedWords.splice(0, updatedWords.length - MAX_WORDS);
+		}
+
+		// Сохраняем в localStorage
+		localStorage.setItem('userWords', JSON.stringify(updatedWords));
+
+		console.log(
+			`Добавлено ${newWords.length} новых слов. Всего: ${updatedWords.length}`
+		);
+
+		// Показываем уведомление, если добавлено много слов
+		if (newWords.length > 10) {
+			showToast(
+				`Словарь автодополнения пополнен ${newWords.length} новыми словами`
+			);
+		}
+
+		// Обновляем счетчик слов
+		updateUserWordsCount();
+	}
+}
+
+// Добавляем обработчик для обучения на основе введенного текста
+textarea.addEventListener('blur', learnFromUserText);
+if (focusModeTextarea) {
+	focusModeTextarea.addEventListener('blur', learnFromUserText);
 }
