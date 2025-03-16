@@ -1,0 +1,65 @@
+.textarea-container {
+	position: relative;
+	margin-bottom: 30px;
+}
+
+#textarea {
+	width: 100%;
+	min-height: 200px;
+	border: 1px solid var(--border-color);
+	border-radius: 12px;
+	padding: 16px;
+	font-size: 17px;
+	transition: all 0.3s ease;
+	background-color: var(--background-secondary) !important;
+	color: var(--text-primary) !important;
+	resize: vertical;
+	line-height: 1.5;
+}
+
+#textarea::placeholder {
+	color: var(--text-secondary);
+}
+
+#textarea:focus {
+	outline: none;
+	border-color: var(--accent-color);
+	box-shadow: 0 0 0 4px var(--accent-color-alpha);
+}
+
+.textarea-actions {
+	position: absolute;
+	bottom: 12px;
+	right: 12px;
+	display: flex;
+	gap: 8px;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.textarea-container:hover .textarea-actions,
+.textarea-container:focus-within .textarea-actions {
+	opacity: 1;
+}
+
+.action-button {
+	background: var(--button-bg);
+	border: none;
+	border-radius: 6px;
+	padding: 8px;
+	cursor: pointer;
+	color: var(--text-primary);
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.action-button:hover {
+	background: var(--button-hover);
+	transform: translateY(-1px);
+}
+
+.action-button:active {
+	transform: translateY(0);
+}

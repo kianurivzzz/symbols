@@ -1,0 +1,73 @@
+/* Класс для анимации переключения темы */
+.theme-transition {
+	transition: background-color 0.7s ease, color 0.7s ease !important;
+}
+
+.theme-transition * {
+	transition: background-color 0.7s ease, color 0.7s ease, border-color 0.7s ease, box-shadow 0.7s ease !important;
+}
+
+.theme-toggle {
+	background: none;
+	border: none;
+	padding: 8px;
+	cursor: pointer;
+	color: var(--text-primary);
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 0.2s ease;
+	margin-left: auto;
+	position: relative;
+}
+
+.theme-toggle:hover {
+	background-color: var(--button-bg);
+}
+
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+	position: absolute;
+	transition: transform 0.7s ease, opacity 0.7s ease, visibility 0.7s ease;
+}
+
+.theme-toggle .sun-icon {
+	opacity: 0;
+	transform: scale(0);
+	visibility: hidden;
+	stroke: currentColor;
+	fill: none;
+}
+
+.theme-toggle .moon-icon {
+	opacity: 1;
+	transform: scale(1);
+	visibility: visible;
+	stroke: currentColor;
+	fill: none;
+}
+
+.dark-theme .theme-toggle .sun-icon {
+	opacity: 1;
+	transform: scale(1);
+	visibility: visible;
+}
+
+.dark-theme .theme-toggle .moon-icon {
+	opacity: 0;
+	transform: scale(0);
+	visibility: hidden;
+}
+
+.dark-theme .form-control:focus {
+	background-color: var(--background-secondary);
+	border-color: var(--accent-color);
+	box-shadow: 0 0 0 4px var(--accent-color-alpha);
+}
+
+.dark-theme .stat-item:hover {
+	box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
+}

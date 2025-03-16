@@ -1,0 +1,74 @@
+@media (max-width: 734px) {
+	.stats {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+
+	.stat-item {
+		padding: 20px;
+	}
+
+	.stat-value {
+		font-size: 24px;
+	}
+
+	#textarea {
+		font-size: 16px;
+		min-height: 160px;
+	}
+
+	.container {
+		padding: 16px;
+	}
+
+	.navbar-text {
+		display: none;
+	}
+
+	.advanced-stats-row {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 734px) {
+	.share-container {
+		padding: 16px;
+	}
+
+	.share-buttons {
+		gap: 12px;
+	}
+
+	.share-button {
+		width: 40px;
+		height: 40px;
+	}
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 734px) {
+	.stats-grid {
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 12px;
+	}
+
+	.controls-row {
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	.control-button {
+		padding: 10px 14px;
+	}
+}
+
+@media (max-width: 734px) {
+	.share-grid {
+		padding: 16px;
+		max-width: 320px;
+	}
+
+	.share-buttons {
+		gap: 12px;
+	}
+}

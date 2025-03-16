@@ -1,0 +1,27 @@
+.navbar {
+	background-color: var(--navbar-bg) !important;
+	backdrop-filter: saturate(180%) blur(20px);
+	border-bottom: 1px solid var(--border-color);
+	padding: 16px 0;
+	margin-bottom: 30px;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.navbar-brand {
+	font-size: 24px;
+	font-weight: 600;
+	color: var(--text-primary) !important;
+	letter-spacing: -0.5px;
+	text-decoration: none;
+}
+
+.navbar-brand:hover {
+	color: var(--accent-color) !important;
+}
+
+.navbar-text {
+	color: var(--text-secondary) !important;
+	font-size: 15px;
+}

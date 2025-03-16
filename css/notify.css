@@ -1,0 +1,26 @@
+/* Toast notification */
+.toast {
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: var(--toast-bg) !important;
+	color: var(--toast-color) !important;
+	padding: 12px 24px;
+	border-radius: 12px;
+	font-size: 14px;
+	opacity: 0;
+	transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+	pointer-events: none;
+	z-index: 1000;
+	backdrop-filter: blur(8px);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .toast {
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.toast.show {
+	opacity: 1;
+}

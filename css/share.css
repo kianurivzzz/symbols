@@ -1,0 +1,106 @@
+/* Share container styles */
+.share-container {
+	margin: 30px 0;
+	padding: 20px;
+	background-color: var(--background-secondary);
+	border-radius: 18px;
+	border: 1px solid var(--border-color);
+	text-align: center;
+	transition: all 0.3s ease;
+}
+
+.share-container:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dark-theme .share-container:hover {
+	box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
+}
+
+.share-title {
+	color: var(--text-primary);
+	font-size: 16px;
+	font-weight: 500;
+	margin-bottom: 16px;
+}
+
+.share-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.share-button {
+	background-color: var(--button-bg);
+	color: var(--text-primary);
+	border: 1px solid var(--border-color);
+	border-radius: 50%;
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.share-button:hover {
+	background-color: var(--button-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .share-button:hover {
+	box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.share-button:active {
+	transform: translateY(0);
+}
+
+
+.share-grid {
+	margin: 30px auto;
+	padding: 20px;
+	background-color: var(--background-secondary);
+	border-radius: 18px;
+	border: 1px solid var(--border-color);
+	transition: all 0.3s ease;
+	max-width: 400px;
+}
+
+.share-grid:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dark-theme .share-grid:hover {
+	box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
+}
+
+.share-header {
+	margin-bottom: 16px;
+	text-align: center;
+}
+
+.share-title {
+	color: var(--text-primary);
+	font-size: 16px;
+	font-weight: 500;
+	margin: 0;
+}
+
+/* Скрываем старые стили шаринга */
+.share-container {
+	display: none;
+}
+
+/* Обновляем стили кнопок шаринга */
+.share-buttons {
+	display: grid;
+	grid-template-columns: repeat(3, 0fr);
+	gap: 16px;
+	justify-content: center;
+}

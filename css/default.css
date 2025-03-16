@@ -1,0 +1,22 @@
+.container {
+	max-width: 980px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+/* Theme transition */
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
+	line-height: 1.47059;
+	transition: background-color 0.5s ease, color 0.5s ease;
+	background-color: var(--background-primary) !important;
+	color: var(--text-primary) !important;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Глобальные переходы для всех элементов */
+*,
+*::before,
+*::after {
+	transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+}

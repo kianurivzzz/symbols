@@ -13,15 +13,50 @@ const statsElements = {
 };
 const clearButton = document.querySelector('#clearButton');
 const copyButton = document.querySelector('#copyButton');
+const downloadButton = document.querySelector('#downloadButton');
 const themeToggle = document.querySelector('#theme-toggle');
 const advancedStatsToggle = document.querySelector('#advanced-stats-toggle');
 const advancedStatsSection = document.querySelector('#advanced-stats');
+
+// DOM Elements for sharing
+const shareButtons = {
+	vk: document.querySelector('#share-vk'),
+	telegram: document.querySelector('#share-telegram'),
+	twitter: document.querySelector('#share-twitter'),
+	generateImage: document.querySelector('#generate-image'),
+};
+
+// Объявляем переменные для режима фокусировки
+let focusModeButton;
+let focusMode;
+let focusModeClose;
+let focusModeTextarea;
+let focusModeWordCount;
+let focusModeCharCount;
+
+// Объявляем переменные для таймера
+let timerDisplay;
+let timerSettingsButton;
+let timerSettings;
+let timerSettingsClose;
+let timerPresets;
+let timerCustomInput;
+let timerApply;
+let timerStart;
+let timerPause;
+let timerReset;
 
 // History management
 const MAX_HISTORY_ITEMS = 10;
 let textHistory = [];
 let currentHistoryIndex = -1;
 let isRestoringFromHistory = false;
+
+// Timer variables
+let timerMinutes = 25;
+let timerSeconds = 0;
+let timerInterval = null;
+let timerRunning = false;
 
 // Create toast element
 const toast = document.createElement('div');
@@ -517,7 +552,148 @@ function toggleAdvancedStats() {
 	}
 }
 
-// Event Listeners
+// Focus mode functions
+function toggleFocusMode() {
+	console.log('toggleFocusMode called');
+	if (!focusMode) {
+		console.error('Focus mode element not found!');
+		return;
+	}
+
+	focusMode.classList.toggle('active');
+
+	if (focusMode.classList.contains('active')) {
+		// Copy text from main textarea to focus mode textarea
+		focusModeTextarea.value = textarea.value;
+		updateFocusModeStats();
+
+		// Prevent scrolling of the background
+		document.body.style.overflow = 'hidden';
+	} else {
+		// Copy text from focus mode textarea to main textarea
+		textarea.value = focusModeTextarea.value;
+		updateStats();
+
+		// Restore scrolling
+		document.body.style.overflow = '';
+	}
+}
+
+function updateFocusModeStats() {
+	const text = focusModeTextarea.value;
+	const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+	const charCount = text.length;
+
+	focusModeWordCount.textContent = wordCount;
+	focusModeCharCount.textContent = charCount;
+}
+
+// Timer functions
+function formatTime(minutes, seconds) {
+	return `${minutes.toString().padStart(2, '0')}:${seconds
+		.toString()
+		.padStart(2, '0')}`;
+}
+
+function updateTimerDisplay() {
+	timerDisplay.textContent = formatTime(timerMinutes, timerSeconds);
+}
+
+function startTimer() {
+	if (timerRunning) return;
+
+	timerRunning = true;
+	timerStart.style.display = 'none';
+	timerPause.style.display = 'flex';
+
+	timerInterval = setInterval(() => {
+		if (timerSeconds === 0) {
+			if (timerMinutes === 0) {
+				// Timer finished
+				clearInterval(timerInterval);
+				timerRunning = false;
+				timerStart.style.display = 'flex';
+				timerPause.style.display = 'none';
+
+				// Play sound and show notification
+				playTimerEndSound();
+				showTimerEndNotification();
+
+				return;
+			}
+			timerMinutes--;
+			timerSeconds = 59;
+		} else {
+			timerSeconds--;
+		}
+
+		updateTimerDisplay();
+	}, 1000);
+}
+
+function pauseTimer() {
+	if (!timerRunning) return;
+
+	clearInterval(timerInterval);
+	timerRunning = false;
+	timerStart.style.display = 'flex';
+	timerPause.style.display = 'none';
+}
+
+function resetTimer() {
+	pauseTimer();
+	timerMinutes = 25;
+	timerSeconds = 0;
+	updateTimerDisplay();
+
+	// Reset active preset
+	timerPresets.forEach(preset => {
+		preset.classList.remove('active');
+		if (preset.dataset.minutes === '25') {
+			preset.classList.add('active');
+		}
+	});
+}
+
+function setTimer(minutes) {
+	pauseTimer();
+	timerMinutes = minutes;
+	timerSeconds = 0;
+	updateTimerDisplay();
+}
+
+function toggleTimerSettings() {
+	timerSettings.classList.toggle('show');
+}
+
+function playTimerEndSound() {
+	// Create audio element
+	const audio = new Audio(
+		'https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3'
+	);
+	audio.volume = 0.5;
+	audio.play();
+}
+
+function showTimerEndNotification() {
+	// Show toast notification
+	showToast('Время вышло! Сделайте перерыв.', 5000);
+
+	// Try to show browser notification if allowed
+	if ('Notification' in window && Notification.permission === 'granted') {
+		new Notification('Время вышло!', {
+			body: 'Ваша сессия письма завершена. Сделайте перерыв.',
+			icon: '/img/favicons/favicon.ico',
+		});
+	} else if (
+		'Notification' in window &&
+		Notification.permission !== 'denied'
+	) {
+		Notification.requestPermission();
+	}
+}
+
+// Event listeners
 textarea.addEventListener('input', updateStats);
 
 clearButton.addEventListener('click', () => {
@@ -535,87 +711,36 @@ copyButton.addEventListener('click', async () => {
 	}
 });
 
+downloadButton.addEventListener('click', () => {
+	downloadTextAsTxt();
+});
+
 if (advancedStatsToggle) {
 	advancedStatsToggle.addEventListener('click', toggleAdvancedStats);
 }
 
 // Add event listeners for history
 document.addEventListener('DOMContentLoaded', () => {
-	const historyToggle = document.querySelector('#history-toggle');
-	if (historyToggle) {
-		historyToggle.addEventListener('click', toggleHistoryPanel);
-	}
+	// Инициализация элементов режима фокусировки
+	focusModeButton = document.querySelector('#focusModeButton');
+	focusMode = document.querySelector('#focus-mode');
+	focusModeClose = document.querySelector('#focus-mode-close');
+	focusModeTextarea = document.querySelector('#focus-mode-textarea');
+	focusModeWordCount = document.querySelector('#focus-mode-word-count');
+	focusModeCharCount = document.querySelector('#focus-mode-char-count');
 
-	const clearHistoryButton = document.querySelector('#clear-history');
-	if (clearHistoryButton) {
-		clearHistoryButton.addEventListener('click', clearAllHistory);
-	}
-});
+	// Инициализация элементов таймера
+	timerDisplay = document.querySelector('#timer-display');
+	timerSettingsButton = document.querySelector('#timer-settings-button');
+	timerSettings = document.querySelector('#timer-settings');
+	timerSettingsClose = document.querySelector('#timer-settings-close');
+	timerPresets = document.querySelectorAll('.timer-preset');
+	timerCustomInput = document.querySelector('#timer-custom-input');
+	timerApply = document.querySelector('#timer-apply');
+	timerStart = document.querySelector('#timer-start');
+	timerPause = document.querySelector('#timer-pause');
+	timerReset = document.querySelector('#timer-reset');
 
-themeToggle.addEventListener('click', () => {
-	// Добавляем класс для анимации
-	document.body.classList.add('theme-transition');
-
-	// Переключаем тему после небольшой задержки
-	setTimeout(() => {
-		document.body.classList.toggle('dark-theme');
-		const isDark = document.body.classList.contains('dark-theme');
-		localStorage.setItem('theme', isDark ? 'dark' : 'light');
-		showToast(isDark ? 'Тёмная тема включена' : 'Светлая тема включена');
-	}, 50);
-
-	// Удаляем класс анимации после завершения перехода
-	setTimeout(() => {
-		document.body.classList.remove('theme-transition');
-	}, 800);
-});
-
-// Initialize theme based on system preference or saved preference
-const savedTheme = localStorage.getItem('theme');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-	document.body.classList.add('dark-theme');
-}
-
-// Listen for system theme changes
-window
-	.matchMedia('(prefers-color-scheme: dark)')
-	.addEventListener('change', e => {
-		if (!localStorage.getItem('theme')) {
-			// Добавляем класс для анимации
-			document.body.classList.add('theme-transition');
-
-			// Переключаем тему после небольшой задержки
-			setTimeout(() => {
-				document.body.classList.toggle('dark-theme', e.matches);
-			}, 50);
-
-			// Удаляем класс анимации после завершения перехода
-			setTimeout(() => {
-				document.body.classList.remove('theme-transition');
-			}, 800);
-		}
-	});
-
-// Handle paste event
-textarea.addEventListener('paste', e => {
-	e.preventDefault();
-	const text = e.clipboardData.getData('text');
-	const start = textarea.selectionStart;
-	const end = textarea.selectionEnd;
-
-	textarea.value =
-		textarea.value.substring(0, start) +
-		text +
-		textarea.value.substring(end);
-
-	textarea.selectionStart = textarea.selectionEnd = start + text.length;
-	updateStats();
-});
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
 	// Initialize advanced stats visibility
 	const showAdvancedStats =
 		localStorage.getItem('showAdvancedStats') === 'true';
@@ -642,5 +767,337 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
+	// Add event listener for history toggle
+	if (historyToggle) {
+		historyToggle.addEventListener('click', toggleHistoryPanel);
+	}
+
+	// Add event listener for clear history button
+	const clearHistoryButton = document.querySelector('#clear-history');
+	if (clearHistoryButton) {
+		clearHistoryButton.addEventListener('click', clearAllHistory);
+	}
+
 	updateStats();
+
+	// Add event listeners for share buttons
+	if (shareButtons.vk) {
+		shareButtons.vk.addEventListener('click', shareToVK);
+	}
+
+	if (shareButtons.telegram) {
+		shareButtons.telegram.addEventListener('click', shareToTelegram);
+	}
+
+	if (shareButtons.twitter) {
+		shareButtons.twitter.addEventListener('click', shareToTwitter);
+	}
+
+	if (shareButtons.generateImage) {
+		shareButtons.generateImage.addEventListener('click', generateImage);
+	}
+
+	// Event listeners for focus mode
+	console.log('Setting up focus mode event listeners');
+	console.log('focusModeButton:', focusModeButton);
+	console.log('focusMode:', focusMode);
+	console.log('focusModeClose:', focusModeClose);
+
+	if (focusModeButton) {
+		console.log('Adding click event listener to focusModeButton');
+		focusModeButton.addEventListener('click', toggleFocusMode);
+	}
+
+	if (focusModeClose) {
+		focusModeClose.addEventListener('click', toggleFocusMode);
+	}
+
+	if (focusModeTextarea) {
+		focusModeTextarea.addEventListener('input', updateFocusModeStats);
+	}
+
+	// Event listeners for timer
+	if (timerSettingsButton) {
+		timerSettingsButton.addEventListener('click', toggleTimerSettings);
+	}
+
+	if (timerSettingsClose) {
+		timerSettingsClose.addEventListener('click', () => {
+			timerSettings.classList.remove('show');
+		});
+	}
+
+	if (timerPresets) {
+		timerPresets.forEach(preset => {
+			preset.addEventListener('click', () => {
+				// Remove active class from all presets
+				timerPresets.forEach(p => p.classList.remove('active'));
+
+				// Add active class to clicked preset
+				preset.classList.add('active');
+
+				// Set timer
+				setTimer(parseInt(preset.dataset.minutes));
+			});
+		});
+	}
+
+	if (timerApply) {
+		timerApply.addEventListener('click', () => {
+			const minutes = parseInt(timerCustomInput.value);
+
+			if (isNaN(minutes) || minutes < 1 || minutes > 120) {
+				showToast('Пожалуйста, введите время от 1 до 120 минут');
+				return;
+			}
+
+			// Remove active class from all presets
+			timerPresets.forEach(p => p.classList.remove('active'));
+
+			// Set timer
+			setTimer(minutes);
+
+			// Close settings
+			timerSettings.classList.remove('show');
+
+			// Clear input
+			timerCustomInput.value = '';
+		});
+	}
+
+	if (timerStart) {
+		timerStart.addEventListener('click', startTimer);
+	}
+
+	if (timerPause) {
+		timerPause.addEventListener('click', pauseTimer);
+	}
+
+	if (timerReset) {
+		timerReset.addEventListener('click', resetTimer);
+	}
+
+	// Initialize timer display
+	updateTimerDisplay();
+
+	// Handle paste event
+	textarea.addEventListener('paste', e => {
+		e.preventDefault();
+		const text = e.clipboardData.getData('text');
+		const start = textarea.selectionStart;
+		const end = textarea.selectionEnd;
+
+		textarea.value =
+			textarea.value.substring(0, start) +
+			text +
+			textarea.value.substring(end);
+
+		textarea.selectionStart = textarea.selectionEnd = start + text.length;
+		updateStats();
+	});
 });
+
+// Share functions
+function shareToVK() {
+	const text = textarea.value;
+	if (!text.trim()) {
+		showToast('Нечего публиковать. Введите текст.');
+		return;
+	}
+
+	const stats = getTextStats();
+	const title = 'Статистика текста на symbols.stdout.media';
+	const description = `Символов: ${stats.withSpaces}, Слов: ${stats.words}, Индекс читабельности: ${stats.readabilityScore}/100`;
+
+	// Ограничиваем текст для превью
+	const previewText =
+		text.length > 300 ? text.substring(0, 300) + '...' : text;
+
+	const url = 'https://symbols.stdout.media/';
+	const shareUrl = `https://vk.com/share.php?url=${encodeURIComponent(
+		url
+	)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+		description
+	)}&comment=${encodeURIComponent(previewText)}`;
+
+	window.open(shareUrl, '_blank', 'width=640,height=480');
+	showToast('Открываю окно публикации ВКонтакте');
+}
+
+function shareToTelegram() {
+	const text = textarea.value;
+	if (!text.trim()) {
+		showToast('Нечего публиковать. Введите текст.');
+		return;
+	}
+
+	const stats = getTextStats();
+	const message = `📊 Статистика текста:\n\n📝 Символов: ${
+		stats.withSpaces
+	}\n🔤 Слов: ${stats.words}\n📋 Абзацев: ${
+		stats.paragraphs
+	}\n📖 Индекс читабельности: ${
+		stats.readabilityScore
+	}/100\n\n${text.substring(0, 200)}${
+		text.length > 200 ? '...' : ''
+	}\n\nСоздано в https://kianurivzzz.github.io/symbols/`;
+
+	const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(
+		'https://symbols.stdout.media/'
+	)}&text=${encodeURIComponent(message)}`;
+
+	window.open(shareUrl, '_blank');
+	showToast('Открываю Telegram');
+}
+
+function shareToTwitter() {
+	const text = textarea.value;
+	if (!text.trim()) {
+		showToast('Нечего публиковать. Введите текст.');
+		return;
+	}
+
+	const stats = getTextStats();
+	const message = `📊 Статистика текста:\nСимволов: ${stats.withSpaces}, Слов: ${stats.words}, Индекс читабельности: ${stats.readabilityScore}/100\n\nСоздано в https://kianurivzzz.github.io/symbols/`;
+
+	const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+		message
+	)}`;
+
+	window.open(shareUrl, '_blank');
+	showToast('Открываю Twitter');
+}
+
+function generateImage() {
+	const text = textarea.value;
+	if (!text.trim()) {
+		showToast('Нечего публиковать. Введите текст.');
+		return;
+	}
+
+	// Создаем временный контейнер для изображения
+	const container = document.createElement('div');
+	container.className = 'stats-image-container';
+	document.body.appendChild(container);
+
+	// Получаем статистику
+	const stats = getTextStats();
+
+	// Создаем HTML для изображения
+	container.innerHTML = `
+		<div class="stats-image">
+			<h2>Статистика текста</h2>
+			<div class="stats-image-content">
+				<div class="stats-image-item">
+					<div class="stats-image-label">Символов с пробелами</div>
+					<div class="stats-image-value">${stats.withSpaces}</div>
+				</div>
+				<div class="stats-image-item">
+					<div class="stats-image-label">Символов без пробелов</div>
+					<div class="stats-image-value">${stats.noSpaces}</div>
+				</div>
+				<div class="stats-image-item">
+					<div class="stats-image-label">Количество слов</div>
+					<div class="stats-image-value">${stats.words}</div>
+				</div>
+				<div class="stats-image-item">
+					<div class="stats-image-label">Количество абзацев</div>
+					<div class="stats-image-value">${stats.paragraphs}</div>
+				</div>
+				<div class="stats-image-item">
+					<div class="stats-image-label">Индекс читабельности</div>
+					<div class="stats-image-value">${stats.readabilityScore}/100</div>
+				</div>
+			</div>
+			<div class="stats-image-text">
+				${text.length > 200 ? text.substring(0, 200) + '...' : text}
+			</div>
+			<div class="stats-image-footer">
+				Создано в https://kianurivzzz.github.io/symbols/
+			</div>
+		</div>
+	`;
+
+	// Используем html2canvas для создания изображения
+	try {
+		// Проверяем, загружена ли библиотека html2canvas
+		if (typeof html2canvas === 'undefined') {
+			// Если библиотека не загружена, загружаем её
+			const script = document.createElement('script');
+			script.src =
+				'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+			script.onload = () => {
+				// После загрузки библиотеки вызываем функцию снова
+				generateImage();
+			};
+			document.head.appendChild(script);
+
+			// Удаляем временный контейнер
+			document.body.removeChild(container);
+			return;
+		}
+
+		// Если библиотека загружена, создаем изображение
+		html2canvas(container, {
+			backgroundColor: document.body.classList.contains('dark-theme')
+				? '#000000'
+				: '#ffffff',
+			scale: 2,
+		}).then(canvas => {
+			// Создаем ссылку для скачивания
+			const link = document.createElement('a');
+			link.download = 'symbols-stats.png';
+			link.href = canvas.toDataURL('image/png');
+			link.click();
+
+			// Удаляем временный контейнер
+			document.body.removeChild(container);
+			showToast('Изображение сохранено');
+		});
+	} catch (error) {
+		console.error('Ошибка при создании изображения:', error);
+		showToast('Не удалось создать изображение');
+		document.body.removeChild(container);
+	}
+}
+
+// Получение текущей статистики текста
+function getTextStats() {
+	const text = textarea.value;
+	return {
+		withSpaces: text.length,
+		noSpaces: text.replace(/\s/g, '').length,
+		words: text.trim() ? text.trim().split(/\s+/).length : 0,
+		paragraphs: countParagraphs(text),
+		sentences: countSentences(text),
+		readabilityScore: calculateReadabilityScore(text, countSentences(text)),
+	};
+}
+
+// Функция для скачивания текста в формате TXT
+function downloadTextAsTxt() {
+	const text = textarea.value;
+	if (!text.trim()) {
+		showToast('Нечего скачивать. Введите текст.');
+		return;
+	}
+
+	// Создаем элемент ссылки для скачивания
+	const element = document.createElement('a');
+	const file = new Blob([text], { type: 'text/plain' });
+	element.href = URL.createObjectURL(file);
+
+	// Генерируем имя файла с датой
+	const date = new Date();
+	const formattedDate = `${date.getDate()}-${
+		date.getMonth() + 1
+	}-${date.getFullYear()}`;
+	element.download = `symbols-text-${formattedDate}.txt`;
+
+	// Добавляем ссылку в DOM, кликаем по ней и удаляем
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+
+	showToast('Текст скачан в формате TXT');
+}

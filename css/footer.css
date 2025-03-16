@@ -1,0 +1,38 @@
+footer {
+	padding: 20px 0;
+	border-top: 1px solid var(--border-color);
+	font-size: 12px;
+	margin-top: 40px;
+}
+
+footer .nav-link {
+	color: var(--text-secondary) !important;
+	font-size: 14px;
+	transition: color 0.3s ease;
+}
+
+footer .nav-link:hover {
+	color: var(--accent-color) !important;
+}
+
+footer .footer-links {
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+footer .text-body-secondary {
+	color: var(--text-secondary) !important;
+	font-size: 13px;
+}
+
+footer a {
+	color: var(--accent-color);
+	transition: color 0.3s ease;
+	text-decoration: none;
+}
+
+footer a:hover {
+	color: var(--text-primary);
+	text-decoration: underline;
+}
