@@ -17,6 +17,12 @@ const themeToggle = document.querySelector('#theme-toggle');
 const advancedStatsToggle = document.querySelector('#advanced-stats-toggle');
 const advancedStatsSection = document.querySelector('#advanced-stats');
 
+// History management
+const MAX_HISTORY_ITEMS = 10;
+let textHistory = [];
+let currentHistoryIndex = -1;
+let isRestoringFromHistory = false;
+
 // Create toast element
 const toast = document.createElement('div');
 toast.className = 'toast';
@@ -70,7 +76,7 @@ function countUniqueWords(text) {
 	return uniqueWords.size;
 }
 
-// Calculate Flesch-Kincaid readability score (adapted for Russian)
+// Calculate Flesch-Kincaid readability score, adapted for Russian
 function calculateReadabilityScore(text, sentenceCount) {
 	if (!text.trim() || sentenceCount === 0) return 0;
 
@@ -129,6 +135,219 @@ function getTopWords(text, limit = 10) {
 		.sort((a, b) => b[1] - a[1])
 		.slice(0, limit)
 		.map(([word, count]) => ({ word, count }));
+}
+
+// Save current text to history
+function saveToHistory(text) {
+	if (isRestoringFromHistory) return;
+
+	// Don't save if text is empty or the same as the last entry
+	if (
+		!text.trim() ||
+		(textHistory.length > 0 &&
+			textHistory[textHistory.length - 1].text === text)
+	) {
+		return;
+	}
+
+	// Create history item with timestamp
+	const historyItem = {
+		text: text,
+		timestamp: new Date().toISOString(),
+		stats: {
+			symbolsWithSpaces: text.length,
+			symbolsNoSpaces: text.replace(/\s/g, '').length,
+			words: text.trim() ? text.trim().split(/\s+/).length : 0,
+			paragraphs: countParagraphs(text),
+			sentences: countSentences(text),
+		},
+	};
+
+	// Add to history and trim if needed
+	textHistory.push(historyItem);
+	if (textHistory.length > MAX_HISTORY_ITEMS) {
+		textHistory.shift(); // Remove oldest item
+	}
+
+	// Update current index
+	currentHistoryIndex = textHistory.length - 1;
+
+	// Save to localStorage
+	localStorage.setItem('textHistory', JSON.stringify(textHistory));
+
+	// Update history UI
+	updateHistoryUI();
+}
+
+// Load history from localStorage
+function loadHistory() {
+	const savedHistory = localStorage.getItem('textHistory');
+	if (savedHistory) {
+		try {
+			textHistory = JSON.parse(savedHistory);
+			updateHistoryUI();
+		} catch (e) {
+			console.error('Error loading history:', e);
+			textHistory = [];
+		}
+	}
+}
+
+// Update history UI
+function updateHistoryUI() {
+	const historyList = document.querySelector('#history-list');
+	if (!historyList) return;
+
+	// Clear current list
+	historyList.innerHTML = '';
+
+	if (textHistory.length === 0) {
+		const emptyItem = document.createElement('li');
+		emptyItem.className = 'history-item empty';
+		emptyItem.textContent = 'История пуста';
+		historyList.appendChild(emptyItem);
+		return;
+	}
+
+	// Add each history item to the list (in reverse order - newest first)
+	textHistory
+		.slice()
+		.reverse()
+		.forEach((item, index) => {
+			const reversedIndex = textHistory.length - 1 - index;
+
+			const listItem = document.createElement('li');
+			listItem.className = 'history-item';
+			listItem.dataset.index = reversedIndex;
+
+			const preview =
+				item.text.substring(0, 50) +
+				(item.text.length > 50 ? '...' : '');
+
+			const date = new Date(item.timestamp);
+			const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString(
+				[],
+				{ hour: '2-digit', minute: '2-digit' }
+			)}`;
+
+			listItem.innerHTML = `
+			<div class="history-item-header">
+				<span class="history-date">${formattedDate}</span>
+				<div class="history-actions">
+					<button class="history-action-button history-restore" title="Восстановить">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M3 12h18M3 12l6-6M3 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</button>
+					<button class="history-action-button history-delete" title="Удалить">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12z" fill="currentColor"/>
+							<path d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
+						</svg>
+					</button>
+				</div>
+			</div>
+			<div class="history-preview">${preview}</div>
+			<div class="history-stats">
+				<span>${item.stats.symbolsWithSpaces} симв.</span>
+				<span>${item.stats.words} сл.</span>
+				<span>${item.stats.paragraphs} абз.</span>
+			</div>
+		`;
+
+			// Add event listeners
+			listItem
+				.querySelector('.history-restore')
+				.addEventListener('click', e => {
+					e.stopPropagation();
+					restoreFromHistory(reversedIndex);
+				});
+
+			listItem
+				.querySelector('.history-delete')
+				.addEventListener('click', e => {
+					e.stopPropagation();
+					deleteFromHistory(reversedIndex);
+				});
+
+			// Add click event to the whole item
+			listItem.addEventListener('click', () => {
+				restoreFromHistory(reversedIndex);
+			});
+
+			historyList.appendChild(listItem);
+		});
+}
+
+// Restore text from history
+function restoreFromHistory(index) {
+	if (index < 0 || index >= textHistory.length) return;
+
+	isRestoringFromHistory = true;
+	textarea.value = textHistory[index].text;
+	currentHistoryIndex = index;
+	updateStats();
+	isRestoringFromHistory = false;
+
+	showToast('Текст восстановлен из истории');
+}
+
+// Delete item from history
+function deleteFromHistory(index) {
+	if (index < 0 || index >= textHistory.length) return;
+
+	textHistory.splice(index, 1);
+
+	// Update current index
+	if (currentHistoryIndex >= textHistory.length) {
+		currentHistoryIndex = textHistory.length - 1;
+	}
+
+	// Save to localStorage
+	localStorage.setItem('textHistory', JSON.stringify(textHistory));
+
+	// Update history UI
+	updateHistoryUI();
+
+	showToast('Запись удалена из истории');
+}
+
+// Toggle history panel
+function toggleHistoryPanel() {
+	const historyPanel = document.querySelector('#history-panel');
+	if (!historyPanel) return;
+
+	historyPanel.classList.toggle('show');
+
+	const isVisible = historyPanel.classList.contains('show');
+	const historyToggle = document.querySelector('#history-toggle');
+
+	if (historyToggle) {
+		historyToggle.textContent = isVisible
+			? 'Скрыть историю'
+			: 'Показать историю';
+	}
+
+	// Save preference
+	localStorage.setItem('showHistoryPanel', isVisible ? 'true' : 'false');
+}
+
+// Clear all history
+function clearAllHistory() {
+	if (textHistory.length === 0) return;
+
+	if (confirm('Вы уверены, что хотите очистить всю историю?')) {
+		textHistory = [];
+		currentHistoryIndex = -1;
+
+		// Save to localStorage
+		localStorage.setItem('textHistory', JSON.stringify(textHistory));
+
+		// Update history UI
+		updateHistoryUI();
+
+		showToast('История очищена');
+	}
 }
 
 // Update statistics
@@ -212,6 +431,12 @@ function updateStats() {
 
 	// Update top words list
 	updateTopWordsList(stats.topWords);
+
+	// Save to history (with debounce)
+	clearTimeout(window.saveHistoryTimeout);
+	window.saveHistoryTimeout = setTimeout(() => {
+		saveToHistory(text);
+	}, 1000);
 }
 
 // Update readability description based on score
@@ -314,6 +539,19 @@ if (advancedStatsToggle) {
 	advancedStatsToggle.addEventListener('click', toggleAdvancedStats);
 }
 
+// Add event listeners for history
+document.addEventListener('DOMContentLoaded', () => {
+	const historyToggle = document.querySelector('#history-toggle');
+	if (historyToggle) {
+		historyToggle.addEventListener('click', toggleHistoryPanel);
+	}
+
+	const clearHistoryButton = document.querySelector('#clear-history');
+	if (clearHistoryButton) {
+		clearHistoryButton.addEventListener('click', clearAllHistory);
+	}
+});
+
 themeToggle.addEventListener('click', () => {
 	// Добавляем класс для анимации
 	document.body.classList.add('theme-transition');
@@ -385,6 +623,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		advancedStatsSection.classList.add('show');
 		if (advancedStatsToggle) {
 			advancedStatsToggle.textContent = 'Скрыть расширенную статистику';
+		}
+	}
+
+	// Initialize history
+	loadHistory();
+
+	// Initialize history panel visibility
+	const showHistoryPanel =
+		localStorage.getItem('showHistoryPanel') === 'true';
+	const historyPanel = document.querySelector('#history-panel');
+	const historyToggle = document.querySelector('#history-toggle');
+
+	if (historyPanel && showHistoryPanel) {
+		historyPanel.classList.add('show');
+		if (historyToggle) {
+			historyToggle.textContent = 'Скрыть историю';
 		}
 	}
 

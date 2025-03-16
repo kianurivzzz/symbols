@@ -54,13 +54,13 @@
     </noscript>
     <!-- /Top.Mail.Ru counter -->
 
-    <title>stdout.symbols – выводим количество символов в тексте на экран</title>
+    <title>symbols – выводим количество символов в тексте на экран</title>
 </head>
 
 <body class='d-flex flex-column min-vh-100'>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="https://symbols.stdout.media/">symbols.</a>
+            <a class="navbar-brand" href="https://kianurivzzz.github.io/symbols/">symbols.</a>
             <span class="navbar-text">
                 выводим количество символов на экран
             </span>
@@ -113,6 +113,27 @@
                     </button>
                 </div>
             </div>
+
+            <div class="history-toggle-container">
+                <button id="history-toggle" class="history-toggle">Показать историю</button>
+            </div>
+
+            <div id="history-panel" class="history-panel">
+                <div class="history-header">
+                    <h3>История текстов</h3>
+                    <button id="clear-history" class="clear-history-button" title="Очистить всю историю">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                                fill="currentColor" />
+                        </svg>
+                        Очистить историю
+                    </button>
+                </div>
+                <ul id="history-list" class="history-list">
+                    <li class="history-item empty">История пуста</li>
+                </ul>
+            </div>
+
             <div class="stats">
                 <div class="stat-item">
                     <div class="stat-content">
