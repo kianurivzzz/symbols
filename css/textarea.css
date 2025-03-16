@@ -15,6 +15,7 @@
 	color: var(--text-primary) !important;
 	resize: vertical;
 	line-height: 1.5;
+	padding-right: 50px;
 }
 
 #textarea::placeholder {
@@ -44,12 +45,14 @@
 
 .textarea-actions {
 	position: absolute;
-	bottom: 12px;
+	top: 12px;
 	right: 12px;
 	display: flex;
+	flex-direction: column;
 	gap: 8px;
 	opacity: 0;
 	transition: opacity 0.2s ease;
+	z-index: 10;
 }
 
 .textarea-container:hover .textarea-actions,
@@ -77,4 +80,27 @@
 
 .action-button:active {
 	transform: translateY(0);
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 734px) {
+	.textarea-actions {
+		top: 8px;
+		right: 8px;
+		gap: 6px;
+		opacity: 1;
+		/* Всегда показываем на мобильных */
+		background-color: var(--background-secondary);
+		padding: 4px;
+		border-radius: 8px;
+	}
+
+	.action-button {
+		padding: 6px;
+	}
+
+	#textarea {
+		padding-right: 40px;
+		/* Уменьшаем отступ для мобильных */
+	}
 }
