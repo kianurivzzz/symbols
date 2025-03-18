@@ -33,6 +33,22 @@ let focusModeTextarea;
 let focusModeWordCount;
 let focusModeCharCount;
 
+// Объявляем переменные для текстовых инструментов
+let textCaseUpperButton;
+let textCaseLowerButton;
+let textCaseTitleButton;
+let textCleanSpacesButton;
+let textTrimButton;
+let textSearchReplaceButton;
+let textTransliterateButton;
+let searchReplacePanel;
+let searchReplaceClose;
+let searchInput;
+let replaceInput;
+let searchButton;
+let replaceButton;
+let replaceAllButton;
+
 // Объявляем переменные для таймера
 let timerDisplay;
 let timerSettingsButton;
@@ -56,6 +72,10 @@ let timerMinutes = 25;
 let timerSeconds = 0;
 let timerInterval = null;
 let timerRunning = false;
+
+// Search variables
+let searchResults = [];
+let currentSearchIndex = -1;
 
 // Create toast element
 const toast = document.createElement('div');
@@ -587,6 +607,379 @@ function updateFocusModeStats() {
 	focusModeCharCount.textContent = charCount;
 }
 
+// Функции работы с текстом в режиме фокусировки
+
+// Преобразование в верхний регистр
+function convertToUpperCase() {
+	if (!focusModeTextarea) return;
+
+	const selection = getSelection(focusModeTextarea);
+	if (selection.text) {
+		replaceSelection(
+			focusModeTextarea,
+			selection.text.toUpperCase(),
+			selection.start,
+			selection.end
+		);
+	} else {
+		focusModeTextarea.value = focusModeTextarea.value.toUpperCase();
+	}
+	updateFocusModeStats();
+	showToast('Текст преобразован в верхний регистр');
+}
+
+// Преобразование в нижний регистр
+function convertToLowerCase() {
+	if (!focusModeTextarea) return;
+
+	const selection = getSelection(focusModeTextarea);
+	if (selection.text) {
+		replaceSelection(
+			focusModeTextarea,
+			selection.text.toLowerCase(),
+			selection.start,
+			selection.end
+		);
+	} else {
+		focusModeTextarea.value = focusModeTextarea.value.toLowerCase();
+	}
+	updateFocusModeStats();
+	showToast('Текст преобразован в нижний регистр');
+}
+
+// Преобразование в начальные прописные
+function convertToTitleCase() {
+	if (!focusModeTextarea) return;
+
+	const selection = getSelection(focusModeTextarea);
+	if (selection.text) {
+		replaceSelection(
+			focusModeTextarea,
+			selection.text.replace(
+				/\b\w+/g,
+				word =>
+					word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+			),
+			selection.start,
+			selection.end
+		);
+	} else {
+		focusModeTextarea.value = focusModeTextarea.value.replace(
+			/\b\w+/g,
+			word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+		);
+	}
+	updateFocusModeStats();
+	showToast('Текст преобразован в начальные прописные');
+}
+
+// Удаление лишних пробелов
+function cleanExtraSpaces() {
+	if (!focusModeTextarea) return;
+
+	const selection = getSelection(focusModeTextarea);
+	if (selection.text) {
+		// Заменяем двойные пробелы на одинарные и удаляем пробелы в начале строк
+		const cleanedText = selection.text
+			.replace(/[ \t]+/g, ' ')
+			.replace(/\n[ \t]+/g, '\n')
+			.replace(/[ \t]+\n/g, '\n')
+			.replace(/\n{3,}/g, '\n\n');
+
+		replaceSelection(
+			focusModeTextarea,
+			cleanedText,
+			selection.start,
+			selection.end
+		);
+	} else {
+		// Применяем ко всему тексту
+		focusModeTextarea.value = focusModeTextarea.value
+			.replace(/[ \t]+/g, ' ')
+			.replace(/\n[ \t]+/g, '\n')
+			.replace(/[ \t]+\n/g, '\n')
+			.replace(/\n{3,}/g, '\n\n');
+	}
+	updateFocusModeStats();
+	showToast('Лишние пробелы удалены');
+}
+
+// Удаление пробелов в начале и конце
+function trimText() {
+	if (!focusModeTextarea) return;
+
+	const selection = getSelection(focusModeTextarea);
+	if (selection.text) {
+		// Удаляем пробелы в начале и конце выделенного текста
+		replaceSelection(
+			focusModeTextarea,
+			selection.text.trim(),
+			selection.start,
+			selection.end
+		);
+	} else {
+		// Применяем ко всему тексту
+		focusModeTextarea.value = focusModeTextarea.value.trim();
+	}
+	updateFocusModeStats();
+	showToast('Пробелы в начале и конце удалены');
+}
+
+// Транслитерация текста (кириллица -> латиница)
+function transliterateText() {
+	if (!focusModeTextarea) return;
+
+	const selection = getSelection(focusModeTextarea);
+	let textToTransliterate = selection.text || focusModeTextarea.value;
+
+	// Таблица транслитерации
+	const translitMap = {
+		а: 'a',
+		б: 'b',
+		в: 'v',
+		г: 'g',
+		д: 'd',
+		е: 'e',
+		ё: 'yo',
+		ж: 'zh',
+		з: 'z',
+		и: 'i',
+		й: 'y',
+		к: 'k',
+		л: 'l',
+		м: 'm',
+		н: 'n',
+		о: 'o',
+		п: 'p',
+		р: 'r',
+		с: 's',
+		т: 't',
+		у: 'u',
+		ф: 'f',
+		х: 'kh',
+		ц: 'ts',
+		ч: 'ch',
+		ш: 'sh',
+		щ: 'sch',
+		ъ: '',
+		ы: 'y',
+		ь: '',
+		э: 'e',
+		ю: 'yu',
+		я: 'ya',
+		А: 'A',
+		Б: 'B',
+		В: 'V',
+		Г: 'G',
+		Д: 'D',
+		Е: 'E',
+		Ё: 'Yo',
+		Ж: 'Zh',
+		З: 'Z',
+		И: 'I',
+		Й: 'Y',
+		К: 'K',
+		Л: 'L',
+		М: 'M',
+		Н: 'N',
+		О: 'O',
+		П: 'P',
+		Р: 'R',
+		С: 'S',
+		Т: 'T',
+		У: 'U',
+		Ф: 'F',
+		Х: 'Kh',
+		Ц: 'Ts',
+		Ч: 'Ch',
+		Ш: 'Sh',
+		Щ: 'Sch',
+		Ъ: '',
+		Ы: 'Y',
+		Ь: '',
+		Э: 'E',
+		Ю: 'Yu',
+		Я: 'Ya',
+	};
+
+	// Выполняем транслитерацию
+	const transliterated = textToTransliterate.replace(
+		/[а-яА-ЯёЁ]/g,
+		char => translitMap[char] || char
+	);
+
+	// Заменяем текст
+	if (selection.text) {
+		replaceSelection(
+			focusModeTextarea,
+			transliterated,
+			selection.start,
+			selection.end
+		);
+	} else {
+		focusModeTextarea.value = transliterated;
+	}
+
+	updateFocusModeStats();
+	showToast('Текст транслитерирован');
+}
+
+// Функции для поиска и замены
+function toggleSearchReplacePanel() {
+	if (!searchReplacePanel) return;
+
+	searchReplacePanel.classList.toggle('show');
+
+	if (searchReplacePanel.classList.contains('show')) {
+		searchInput.focus();
+		// Очищаем предыдущие результаты поиска
+		clearSearchHighlights();
+		searchResults = [];
+		currentSearchIndex = -1;
+	}
+}
+
+function searchText() {
+	const searchTerm = searchInput.value.trim();
+	if (!searchTerm || !focusModeTextarea) return;
+
+	// Очищаем предыдущие результаты поиска
+	clearSearchHighlights();
+
+	const text = focusModeTextarea.value;
+	searchResults = [];
+
+	// Находим все вхождения
+	let match;
+	const regex = new RegExp(escapeRegExp(searchTerm), 'g');
+	while ((match = regex.exec(text)) !== null) {
+		searchResults.push({
+			start: match.index,
+			end: match.index + searchTerm.length,
+			text: match[0],
+		});
+	}
+
+	if (searchResults.length > 0) {
+		// Выделяем первый результат
+		currentSearchIndex = 0;
+		highlightAllSearchResults();
+		highlightCurrentResult();
+		showToast(`Найдено ${searchResults.length} совпадений`);
+	} else {
+		showToast('Совпадений не найдено');
+	}
+}
+
+function replaceCurrentMatch() {
+	if (currentSearchIndex < 0 || currentSearchIndex >= searchResults.length)
+		return;
+
+	const replaceWith = replaceInput.value;
+	const match = searchResults[currentSearchIndex];
+
+	// Заменяем текущее совпадение
+	replaceSelection(focusModeTextarea, replaceWith, match.start, match.end);
+
+	// Обновляем позиции всех совпадений после замены
+	const lengthDiff = replaceWith.length - match.text.length;
+	for (let i = currentSearchIndex + 1; i < searchResults.length; i++) {
+		searchResults[i].start += lengthDiff;
+		searchResults[i].end += lengthDiff;
+	}
+
+	// Обновляем весь поиск
+	searchText();
+}
+
+function replaceAllMatches() {
+	if (searchResults.length === 0) return;
+
+	const searchTerm = searchInput.value.trim();
+	const replaceWith = replaceInput.value;
+
+	if (!searchTerm) return;
+
+	// Заменяем все совпадения
+	focusModeTextarea.value = focusModeTextarea.value.replace(
+		new RegExp(escapeRegExp(searchTerm), 'g'),
+		replaceWith
+	);
+
+	updateFocusModeStats();
+
+	// Обновляем поиск
+	searchText();
+
+	showToast(`Заменено ${searchResults.length} совпадений`);
+}
+
+// Вспомогательные функции
+
+// Функция для экранирования спецсимволов в регулярных выражениях
+function escapeRegExp(string) {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Получение выделенного текста
+function getSelection(textareaElement) {
+	const start = textareaElement.selectionStart;
+	const end = textareaElement.selectionEnd;
+	const text = textareaElement.value.substring(start, end);
+
+	return { start, end, text };
+}
+
+// Замена выделенного текста
+function replaceSelection(textareaElement, replacement, start, end) {
+	const text = textareaElement.value;
+	textareaElement.value =
+		text.substring(0, start) + replacement + text.substring(end);
+
+	// Устанавливаем курсор после замены
+	textareaElement.selectionStart = start + replacement.length;
+	textareaElement.selectionEnd = start + replacement.length;
+
+	// Фокусируемся на элементе
+	textareaElement.focus();
+}
+
+// Очистка всех подсветок поиска
+function clearSearchHighlights() {
+	// Реализация для textarea - сбрасываем выделение
+	if (focusModeTextarea) {
+		focusModeTextarea.blur();
+		setTimeout(() => focusModeTextarea.focus(), 0);
+	}
+}
+
+// Подсветка всех результатов поиска
+function highlightAllSearchResults() {
+	// В простом textarea мы не можем подсветить все результаты без дополнительного DOM
+	// Эта функция будет просто заглушкой для будущей реализации
+	console.log('Highlight all results:', searchResults.length);
+}
+
+// Подсветка текущего результата поиска
+function highlightCurrentResult() {
+	if (currentSearchIndex < 0 || currentSearchIndex >= searchResults.length)
+		return;
+
+	const match = searchResults[currentSearchIndex];
+
+	// Выделяем текст и прокручиваем к нему
+	focusModeTextarea.focus();
+	focusModeTextarea.setSelectionRange(match.start, match.end);
+
+	// Убедимся, что выделение видно в видимой области
+	const textHeight = focusModeTextarea.scrollHeight;
+	const textPosition =
+		(match.start / focusModeTextarea.value.length) * textHeight;
+	const viewportHeight = focusModeTextarea.clientHeight;
+
+	focusModeTextarea.scrollTop = textPosition - viewportHeight / 2;
+}
+
 // Timer functions
 function formatTime(minutes, seconds) {
 	return `${minutes.toString().padStart(2, '0')}:${seconds
@@ -727,6 +1120,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	focusModeTextarea = document.querySelector('#focus-mode-textarea');
 	focusModeWordCount = document.querySelector('#focus-mode-word-count');
 	focusModeCharCount = document.querySelector('#focus-mode-char-count');
+
+	// Инициализация элементов инструментов работы с текстом
+	textCaseUpperButton = document.querySelector('#text-case-upper');
+	textCaseLowerButton = document.querySelector('#text-case-lower');
+	textCaseTitleButton = document.querySelector('#text-case-title');
+	textCleanSpacesButton = document.querySelector('#text-clean-spaces');
+	textTrimButton = document.querySelector('#text-trim');
+	textSearchReplaceButton = document.querySelector('#text-search-replace');
+	textTransliterateButton = document.querySelector('#text-transliterate');
+	searchReplacePanel = document.querySelector('#search-replace-panel');
+	searchReplaceClose = document.querySelector('#search-replace-close');
+	searchInput = document.querySelector('#search-input');
+	replaceInput = document.querySelector('#replace-input');
+	searchButton = document.querySelector('#search-button');
+	replaceButton = document.querySelector('#replace-button');
+	replaceAllButton = document.querySelector('#replace-all-button');
 
 	// Инициализация элементов таймера
 	timerDisplay = document.querySelector('#timer-display');
@@ -894,6 +1303,64 @@ document.addEventListener('DOMContentLoaded', () => {
 		textarea.selectionStart = textarea.selectionEnd = start + text.length;
 		updateStats();
 	});
+
+	// Устанавливаем обработчики событий для текстовых инструментов
+	if (textCaseUpperButton) {
+		textCaseUpperButton.addEventListener('click', convertToUpperCase);
+	}
+
+	if (textCaseLowerButton) {
+		textCaseLowerButton.addEventListener('click', convertToLowerCase);
+	}
+
+	if (textCaseTitleButton) {
+		textCaseTitleButton.addEventListener('click', convertToTitleCase);
+	}
+
+	if (textCleanSpacesButton) {
+		textCleanSpacesButton.addEventListener('click', cleanExtraSpaces);
+	}
+
+	if (textTrimButton) {
+		textTrimButton.addEventListener('click', trimText);
+	}
+
+	if (textTransliterateButton) {
+		textTransliterateButton.addEventListener('click', transliterateText);
+	}
+
+	if (textSearchReplaceButton) {
+		textSearchReplaceButton.addEventListener(
+			'click',
+			toggleSearchReplacePanel
+		);
+	}
+
+	if (searchReplaceClose) {
+		searchReplaceClose.addEventListener('click', toggleSearchReplacePanel);
+	}
+
+	if (searchButton) {
+		searchButton.addEventListener('click', searchText);
+	}
+
+	if (replaceButton) {
+		replaceButton.addEventListener('click', replaceCurrentMatch);
+	}
+
+	if (replaceAllButton) {
+		replaceAllButton.addEventListener('click', replaceAllMatches);
+	}
+
+	// Обработчик нажатия Enter в поле поиска
+	if (searchInput) {
+		searchInput.addEventListener('keydown', e => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				searchText();
+			}
+		});
+	}
 });
 
 // Share functions

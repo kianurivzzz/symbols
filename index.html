@@ -100,7 +100,7 @@
                 <textarea class="form-control" placeholder="Вставь или введи текст для подсчёта" id="textarea"
                     data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"></textarea>
                 <div class="textarea-hint">
-                    Начни вводить текст. Нажмите Tab для автодополнения предложенного слова.
+                    Начни вводить текст. Нажми Tab для автодополнения предложенного слова.
                 </div>
                 <div class="textarea-actions">
                     <button class="action-button" id="clearButton" title="Очистить текст">
@@ -359,11 +359,90 @@
                 </svg>
             </button>
         </div>
+
+        <!-- Добавляем панель инструментов для работы с текстом -->
+        <div class="focus-mode-toolbar">
+            <div class="toolbar-group">
+                <button id="text-case-upper" class="toolbar-button" title="ВЕРХНИЙ РЕГИСТР">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9l6-6 6 6M6 15l6 6 6-6" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button id="text-case-lower" class="toolbar-button" title="нижний регистр">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 9l-6 6-6-6M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button id="text-case-title" class="toolbar-button" title="Начальные Прописные">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 7h16M4 17h16M12 7v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="toolbar-group">
+                <button id="text-clean-spaces" class="toolbar-button" title="Удалить лишние пробелы">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 7h10M7 17h10M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button id="text-trim" class="toolbar-button" title="Удалить пробелы в начале и конце">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 9l-3 3 3 3M17 9l3 3-3 3M14 4l-4 16" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="toolbar-group">
+                <button id="text-search-replace" class="toolbar-button" title="Поиск и замена">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 17.25a6.25 6.25 0 110-12.5 6.25 6.25 0 010 12.5zM16 16l4.5 4.5"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button id="text-transliterate" class="toolbar-button" title="Транслитерация">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 8c0 2-2 4-4 4s-4-2-4-4 2-4 4-4 4 2 4 4z" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 12v8M9 20h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Добавляем панель поиска и замены (скрыта по умолчанию) -->
+        <div id="search-replace-panel" class="search-replace-panel">
+            <div class="search-replace-header">
+                <span>Поиск и замена</span>
+                <button id="search-replace-close" class="search-replace-close">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="search-replace-content">
+                <div class="search-replace-group">
+                    <input type="text" id="search-input" placeholder="Найти...">
+                    <button id="search-button">Найти</button>
+                </div>
+                <div class="search-replace-group">
+                    <input type="text" id="replace-input" placeholder="Заменить на...">
+                    <button id="replace-button">Заменить</button>
+                    <button id="replace-all-button">Заменить все</button>
+                </div>
+            </div>
+        </div>
+
         <div class="focus-mode-textarea-container">
             <textarea id="focus-mode-textarea" class="focus-mode-textarea"
                 placeholder="Начни писать здесь..."></textarea>
             <div class="focus-mode-hint">
-                Функция автодополнения активна. Нажмите Tab для автодополнения предложенного слова.
+                Функция автодополнения активна. Нажми Tab для автодополнения предложенного слова.
             </div>
         </div>
         <div class="focus-mode-footer">

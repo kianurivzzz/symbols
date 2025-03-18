@@ -55,6 +55,150 @@
 	color: var(--text-primary);
 }
 
+/* Стили для панели инструментов работы с текстом */
+.focus-mode-toolbar {
+	display: flex;
+	justify-content: center;
+	padding: 12px 24px;
+	border-bottom: 1px solid var(--border-color);
+	margin-bottom: 16px;
+	gap: 16px;
+	width: 100%;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	flex-wrap: wrap;
+}
+
+.toolbar-group {
+	display: flex;
+	gap: 8px;
+	border-right: 1px solid var(--border-color);
+	padding-right: 16px;
+}
+
+.toolbar-group:last-child {
+	border-right: none;
+}
+
+.toolbar-button {
+	background: none;
+	border: none;
+	width: 36px;
+	height: 36px;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-secondary);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.toolbar-button:hover {
+	background-color: var(--hover-color);
+	color: var(--text-primary);
+}
+
+.toolbar-button.active {
+	background-color: var(--accent-color-alpha);
+	color: var(--accent-color);
+}
+
+/* Стили для панели поиска и замены */
+.search-replace-panel {
+	display: none;
+	flex-direction: column;
+	background-color: var(--background-secondary);
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 600px;
+	margin: 0 auto 16px;
+	overflow: hidden;
+	transition: all 0.3s ease;
+}
+
+.search-replace-panel.show {
+	display: flex;
+}
+
+.search-replace-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	background-color: var(--accent-color);
+	color: white;
+	font-weight: 500;
+}
+
+.search-replace-close {
+	background: none;
+	border: none;
+	color: white;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.8;
+	transition: opacity 0.2s ease;
+}
+
+.search-replace-close:hover {
+	opacity: 1;
+}
+
+.search-replace-content {
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.search-replace-group {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.search-replace-group input {
+	flex: 1;
+	min-width: 200px;
+	height: 36px;
+	padding: 0 12px;
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	background-color: var(--background-primary);
+	color: var(--text-primary);
+	font-size: 14px;
+}
+
+.search-replace-group button {
+	height: 36px;
+	padding: 0 12px;
+	border: none;
+	border-radius: 6px;
+	background-color: var(--accent-color);
+	color: white;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.search-replace-group button:hover {
+	background-color: var(--accent-color-hover);
+}
+
+.search-replace-group button#replace-all-button {
+	background-color: var(--accent-color-secondary);
+}
+
+.search-replace-group button#replace-all-button:hover {
+	background-color: var(--accent-color-secondary-hover);
+}
+
 .focus-mode-textarea-container {
 	flex: 1;
 	position: relative;
@@ -75,7 +219,7 @@
 	line-height: 1.6;
 	color: var(--text-primary);
 	background-color: transparent;
-	padding: 0;
+	padding: 5px;
 	border: 1px solid var(--border-color);
 	border-radius: 12px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -173,7 +317,7 @@
 	display: none;
 }
 
-.timer-settings.active {
+.timer-settings.show {
 	display: block;
 }
 
@@ -250,11 +394,22 @@
 	border-radius: 6px;
 	padding: 8px 12px;
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: background-color 0.2s ease;
 }
 
 .timer-apply:hover {
-	background-color: var(--accent-color-dark);
+	background-color: var(--accent-color-hover);
+}
+
+/* Подсветка найденного текста */
+.highlight-search {
+	background-color: rgba(255, 230, 0, 0.4);
+	border-radius: 2px;
+}
+
+.highlight-current {
+	background-color: rgba(255, 165, 0, 0.6);
+	border-radius: 2px;
 }
 
 /* Адаптивные стили для мобильных устройств */
