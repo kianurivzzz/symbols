@@ -14,6 +14,7 @@
 	font-size: 1.5rem;
 	color: var(--text-primary);
 	text-decoration: none;
+	transition: color 0.3s ease;
 }
 
 .navbar-brand:hover {
@@ -23,6 +24,7 @@
 .navbar-text {
 	color: var(--text-secondary);
 	font-size: 0.9rem;
+	transition: color 0.3s ease;
 }
 
 .navbar-links {

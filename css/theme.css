@@ -71,3 +71,16 @@
 .dark-theme .stat-item:hover {
 	box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08);
 }
+
+/* Добавляем стили для корректного отображения лого и подписи в хедере в тёмной теме */
+.dark-theme .navbar-brand {
+	color: var(--text-primary);
+}
+
+.dark-theme .navbar-text {
+	color: var(--text-secondary);
+}
+
+.dark-theme .theme-toggle:hover {
+	background-color: var(--button-hover);
+}
