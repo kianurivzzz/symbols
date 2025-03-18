@@ -329,7 +329,7 @@
                 </div>
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="text-body-secondary mb-0">© 2024-2025 Никита Карасёв</p>
+                        <p class="text-body-secondary mb-0">© 2024-2025</p>
                         <p class="text-body-secondary mb-0">Разработано <a href="https://nkarasyov.ru"
                                 class="text-decoration-none">Никитой Карасёвым</a></p>
                     </div>
@@ -363,19 +363,22 @@
         <!-- Добавляем панель инструментов для работы с текстом -->
         <div class="focus-mode-toolbar">
             <div class="toolbar-group">
-                <button id="text-case-upper" class="toolbar-button" title="ВЕРХНИЙ РЕГИСТР">
+                <button id="text-case-upper" class="toolbar-button"
+                    title="ВЕРХНИЙ РЕГИСТР&#10;Преобразует весь текст или выделенный фрагмент в верхний регистр">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 9l6-6 6 6M6 15l6 6 6-6" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
-                <button id="text-case-lower" class="toolbar-button" title="нижний регистр">
+                <button id="text-case-lower" class="toolbar-button"
+                    title="нижний регистр&#10;Преобразует весь текст или выделенный фрагмент в нижний регистр">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18 9l-6 6-6-6M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
-                <button id="text-case-title" class="toolbar-button" title="Начальные Прописные">
+                <button id="text-case-title" class="toolbar-button"
+                    title="Начальные Прописные&#10;Делает первую букву каждого слова заглавной (формат заголовка)">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 7h16M4 17h16M12 7v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
@@ -383,13 +386,15 @@
                 </button>
             </div>
             <div class="toolbar-group">
-                <button id="text-clean-spaces" class="toolbar-button" title="Удалить лишние пробелы">
+                <button id="text-clean-spaces" class="toolbar-button"
+                    title="Удалить лишние пробелы&#10;Заменяет двойные пробелы на одинарные, удаляет пробелы в начале строк">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 7h10M7 17h10M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
                 </button>
-                <button id="text-trim" class="toolbar-button" title="Удалить пробелы в начале и конце">
+                <button id="text-trim" class="toolbar-button"
+                    title="Удалить пробелы в начале и конце&#10;Удаляет все пробелы и табуляции с начала и конца текста">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7 9l-3 3 3 3M17 9l3 3-3 3M14 4l-4 16" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
@@ -397,13 +402,15 @@
                 </button>
             </div>
             <div class="toolbar-group">
-                <button id="text-search-replace" class="toolbar-button" title="Поиск и замена">
+                <button id="text-search-replace" class="toolbar-button"
+                    title="Поиск и замена&#10;Открывает панель для поиска текста и замены найденных фрагментов">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 17.25a6.25 6.25 0 110-12.5 6.25 6.25 0 010 12.5zM16 16l4.5 4.5"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
-                <button id="text-transliterate" class="toolbar-button" title="Транслитерация">
+                <button id="text-transliterate" class="toolbar-button"
+                    title="Транслитерация&#10;Преобразует кириллические символы в латиницу по стандартным правилам">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16 8c0 2-2 4-4 4s-4-2-4-4 2-4 4-4 4 2 4 4z" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round" />
@@ -418,7 +425,7 @@
         <div id="search-replace-panel" class="search-replace-panel">
             <div class="search-replace-header">
                 <span>Поиск и замена</span>
-                <button id="search-replace-close" class="search-replace-close">
+                <button id="search-replace-close" class="search-replace-close" title="Закрыть панель поиска">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" />
@@ -427,13 +434,13 @@
             </div>
             <div class="search-replace-content">
                 <div class="search-replace-group">
-                    <input type="text" id="search-input" placeholder="Найти...">
-                    <button id="search-button">Найти</button>
+                    <input type="text" id="search-input" placeholder="Найти..." title="Введите текст для поиска">
+                    <button id="search-button" title="Найти все вхождения указанного текста">Найти</button>
                 </div>
                 <div class="search-replace-group">
-                    <input type="text" id="replace-input" placeholder="Заменить на...">
-                    <button id="replace-button">Заменить</button>
-                    <button id="replace-all-button">Заменить все</button>
+                    <input type="text" id="replace-input" placeholder="Заменить на..." title="Введите текст для замены">
+                    <button id="replace-button" title="Заменить текущее найденное совпадение">Заменить</button>
+                    <button id="replace-all-button" title="Заменить все найденные совпадения">Заменить все</button>
                 </div>
             </div>
         </div>
@@ -453,7 +460,8 @@
             <div class="focus-mode-timer">
                 <div class="timer-display" id="timer-display">25:00</div>
                 <div class="timer-controls">
-                    <button id="timer-settings-button" class="timer-button" title="Настройки таймера">
+                    <button id="timer-settings-button" class="timer-button"
+                        title="Настройки таймера&#10;Открыть настройки таймера для выбора времени">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
                             <path
@@ -461,17 +469,19 @@
                                 stroke="currentColor" stroke-width="2" />
                         </svg>
                     </button>
-                    <button id="timer-start" class="timer-button" title="Запустить таймер">
+                    <button id="timer-start" class="timer-button" title="Запустить таймер&#10;Начать отсчёт времени">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5 3l14 9-14 9V3z" fill="currentColor" />
                         </svg>
                     </button>
-                    <button id="timer-pause" class="timer-button" title="Пауза" style="display: none;">
+                    <button id="timer-pause" class="timer-button" title="Пауза&#10;Приостановить отсчёт времени"
+                        style="display: none;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="currentColor" />
                         </svg>
                     </button>
-                    <button id="timer-reset" class="timer-button" title="Сбросить таймер">
+                    <button id="timer-reset" class="timer-button"
+                        title="Сбросить таймер&#10;Установить таймер на исходное значение">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M23 4v6h-6M1 20v-6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" />
@@ -488,7 +498,7 @@
     <div id="timer-settings" class="timer-settings">
         <div class="timer-settings-header">
             <div class="timer-settings-title">Настройки таймера</div>
-            <button id="timer-settings-close" class="timer-settings-close">
+            <button id="timer-settings-close" class="timer-settings-close" title="Закрыть настройки таймера">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round" />
@@ -496,17 +506,18 @@
             </button>
         </div>
         <div class="timer-presets">
-            <div class="timer-preset" data-minutes="5">5 мин</div>
-            <div class="timer-preset" data-minutes="15">15 мин</div>
-            <div class="timer-preset active" data-minutes="25">25 мин</div>
-            <div class="timer-preset" data-minutes="30">30 мин</div>
-            <div class="timer-preset" data-minutes="45">45 мин</div>
-            <div class="timer-preset" data-minutes="60">60 мин</div>
+            <div class="timer-preset" data-minutes="5" title="Установить таймер на 5 минут">5 мин</div>
+            <div class="timer-preset" data-minutes="15" title="Установить таймер на 15 минут">15 мин</div>
+            <div class="timer-preset active" data-minutes="25"
+                title="Установить таймер на 25 минут (стандартный помодоро)">25 мин</div>
+            <div class="timer-preset" data-minutes="30" title="Установить таймер на 30 минут">30 мин</div>
+            <div class="timer-preset" data-minutes="45" title="Установить таймер на 45 минут">45 мин</div>
+            <div class="timer-preset" data-minutes="60" title="Установить таймер на 1 час">60 мин</div>
         </div>
         <div class="timer-custom">
             <input type="number" id="timer-custom-input" class="timer-custom-input" min="1" max="120"
-                placeholder="Своё время (мин)">
-            <button id="timer-apply" class="timer-apply">Применить</button>
+                placeholder="Своё время (мин)" title="Введите собственное значение от 1 до 120 минут">
+            <button id="timer-apply" class="timer-apply" title="Применить указанное время">Применить</button>
         </div>
     </div>
 </body>

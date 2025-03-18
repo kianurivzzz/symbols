@@ -453,4 +453,75 @@
 	.timer-presets {
 		grid-template-columns: repeat(2, 1fr);
 	}
+
+	[title]:hover::after {
+		max-width: 280px;
+	}
+}
+
+/* Улучшенные стили для всплывающих подсказок */
+[title] {
+	position: relative;
+}
+
+[title]:hover::after {
+	content: attr(title);
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: rgba(0, 0, 0, 0.85);
+	color: white;
+	padding: 10px 14px;
+	border-radius: 8px;
+	font-size: 13px;
+	line-height: 1.5;
+	white-space: pre-wrap;
+	z-index: 9999;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s, visibility 0.2s;
+	text-align: left;
+	width: max-content;
+	max-width: 400px;
+	pointer-events: none;
+	margin-bottom: 10px;
+	word-wrap: break-word;
+	hyphens: auto;
+}
+
+[title]:hover::before {
+	content: "";
+	position: absolute;
+	bottom: calc(100% - 5px);
+	left: 50%;
+	transform: translateX(-50%) rotate(45deg);
+	width: 10px;
+	height: 10px;
+	background-color: rgba(0, 0, 0, 0.85);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s, visibility 0.2s;
+	z-index: 9998;
+	pointer-events: none;
+	margin-bottom: 5px;
+}
+
+[title]:hover::after,
+[title]:hover::before {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* Позиционирование подсказок для разных элементов */
+.timer-preset[title]::after,
+.timer-preset[title]::before {
+	bottom: auto;
+	top: 100%;
+}
+
+/* Удалить специфическое правило для toolbar-button, которое мешает отображению */
+.toolbar-button[title]::after {
+	/* удаляем white-space: pre */
 }
